@@ -1,48 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Below is the link to the stylesheet CSS file -->
+    <link rel="stylesheet" href="CSS/style.css">
+    <!-- Below is the link to the JavaScript file -->
+    <script src="Javascript/script.js" defer></script>
+    <!-- Below is the link for the Vue.js package -->
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
     <title>SuperSchoolStore</title>
-    <link rel="stylesheet" href="/Public/CSS/style.css">
 </head>
 
 <body>
     <div id="App">
-        <div class="headerContainer">
+        <div id="headerContainer">
             <header class="indexPageHeader">
-                <img src="./Images/education.png" alt="Logo" class="s3Logo">
-                <h1>SuperSchoolStore S3</h1>
-                <div class="checkoutDiv">
+                <div class="homeDiv" onclick="toggleAboutUs()">
+                    <img src="./Images/education.png" alt="Logo" class="s3Logo">
+                    <p>S3</p>
+                </div>
+                <h1>SuperSchoolStore</h1>
+                <div class="shoppingDiv" onclick="toggleShoppingPage()">
+                    <img src="./Images/certificate.png" alt="Go To Shop" class="shopLessonsPNG">
+                    <p>Go Shopping</p>
+                </div>
+                <div class="checkoutDiv" onclick="toggleCheckoutPage()">
                     <img src="./Images/shoppingCart.png" alt="Checkout" class="shoppingCartPNG">
                     <p>Checkout</p>
                 </div>
         </div>
         </header>
         <main>
-            <div class="product" v-for="product in products" :key="product.id">
-                <figure>
-                    <img v-bind:src="product.image" class="product-image" :alt="product.title">
-                </figure>
-                <div class="product-info">
-                    <h3 v-text="product.title"></h3>
-                    <p v-text="product.description"></p>
-                    <p>Price: £{{ product.price }}</p>
-                    <button  class="addButton" v-on:click="addToCart(product)">Add to Cart</button>
+            <section id="landingPage">
+                <div class="aboutUs">
+                    <h2>Welcome to SuperSchoolStore, or S3!</h2>
+                    <p>
+                        We specialize in offering a comprehensive range of
+                        courses
+                        tailored to suit
+                        various learning needs across subjects like languages, science, IT, mathematics, and geography.
+                        Our programs range
+                        from three to twelve months, providing in-depth coverage and professional guidance in each
+                        subject area.
+                    </p>
+                    <p>
+                        At S3, we’re committed to supporting your learning journey every step of the way.<br><br>Our
+                        courses
+                        include:
+                    </p>
+                    <ul>
+                        <li><strong>1-on-1 Support and Feedback:</strong><br>Our dedicated instructors offer
+                            personalized
+                            support and guidance, ensuring that you can address any questions or difficulties in real
+                            time.</li>
+                        <li><strong>Flexible Scheduling:</strong><br>Lessons are offered multiple times per week,
+                            allowing
+                            you to fit learning around your schedule with both live and recorded sessions.</li>
+                        <li><strong>Homework and Peer Review Activities:</strong><br>Engage with peers, complete
+                            assignments, and participate in peer-review activities to reinforce learning and gain
+                            different perspectives.</li>
+                        <li><strong>Certification upon Completion:</strong><br>Every student who completes a course
+                            receives a certificate, helping boost qualifications and validate your skills for future
+                            opportunities.</li>
+                    </ul>
+                    <p>
+                        <br><br>Our programs are designed to provide not just knowledge but also practical experience.
+                        Over
+                        <strong>85%</strong> of our
+                        graduates successfully pass their courses and receive their certifications. Furthermore, nearly
+                        <strong>70%</strong> of our
+                        students go on to secure roles within their chosen industries, applying the skills and expertise
+                        gained in our lessons.
+                    </p>
+                    <p>
+                        Whether you’re starting fresh or advancing your career, S3 provides a supportive and
+                        results-driven environment
+                        where you can achieve your learning goals and set yourself up for future success.
+                        <br><br><a onclick="toggleShoppingPage()" id="shopAllLessons">Click Here to Shop all
+                            lessons.</a>
+                    </p>
+                </div>
+
+                <div class="lessonCategories">
+                    <h2>Lesson Categories Available To Purchase</h2>
+                    <ul>
+                        <li><strong>Languages: </strong>French, Spanish, German, English Literature, English Language
+                        </li>
+                        <li><strong>Science: </strong>Chemistry, Biology, Physics, Astronomy and Solar System Studies
+                        </li>
+                        <li><strong>Internet Technology: </strong>Computer Science, Networking, Cyber Security, AI and
+                            Machine Learning</li>
+                        <li><strong>Mathematics: </strong>Algebra Basics, Geometry Essentials, Arithmetic Fundamentals,
+                            Advanced Algebra</li>
+                        <li><strong>Geography: </strong>World Geography, World Politics, Environmental Geography</li>
+                    </ul>
+                </div>
+
+                <div class="whyChooseUs">
+                    <h2>Why Choose Us?</h2>
+                    <p>At S3, we are committed to providing quality education that is accessible and affordable. Our
+                        experienced instructors, carefully curated materials, and flexible learning options make us the
+                        top choice for lifelong learners. Join us to start your journey today!</p>
+                </div>
+            </section>
+            <section id="shoppingPage">
+                <div class="product" v-for="product in products" :key="product.id">
+                    <figure>
+                        <img v-bind:src="product.image" class="product-image" :alt="product.title">
+                    </figure>
+                    <div class="product-info">
+                        <h3 v-text="product.title"></h3>
+                        <p v-text="product.description"></p>
+                        <p>Price: £{{ product.price }}</p>
+                        <p>Location: {{ product.location }}</p>
+                        <p>spaces Available: {{ product.spacesAvailable }}</p>
+                        <button class="addButton" v-on:click="addToCart(product)">Add to Cart</button>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <div class="footerSection">
+                <div class="footerDiv">
+                    <div>
+                        <a href="#" id="scrollToTop">Scroll To The Top</a>
+                    </div>
+                    <p>SuperSchoolStore S3 &copy; 2024&nbsp;&nbsp;&nbsp;&nbsp;Created by Charlie Dovey M00843428.</p>
                 </div>
             </div>
         </main>
-
-        <div class="footerSection">
-            <div class="footerDiv">
-                <div>
-                    <a href="#" id="scrollToTop" >Back To The Top</a>
-                </div>
-                <p>SuperSchoolStore S3 &copy; 2023&nbsp;&nbsp;&nbsp;&nbsp;Created by Charlie Dovey M00843428.</p>
-            </div>
-        </div>
         <script>
             let app = new Vue({
                 el: '#App',
@@ -50,54 +138,211 @@
                     products: [
                         {
                             id: 1,
-                            title: 'English Language',
+                            title: 'French Language Lessons',
                             category: 'Languages',
-                            description: 'English Language course, 6-month period',
-                            price: 49.50,
-                            quantity: 1,
-                            image: './Images/englishLang.png'
+                            location: 'MDX University, London',
+                            description: 'Comprehensive French language course, 3-month period',
+                            price: 29.50,
+                            spacesAvailable: 5,
+                            image: './Images/french.png'
                         },
                         {
                             id: 2,
-                            title: 'Mathematics',
-                            category: 'Mathematics',
-                            description: 'Comprehensive Mathematics course, 12-month period',
-                            price: 79.99,
-                            quantity: 1,
-                            image: './Images/maths.png'
+                            title: 'Spanish Language Lessons',
+                            category: 'Languages',
+                            location: 'MDX University, London',
+                            description: 'Spanish language course for beginners, 3-month period',
+                            price: 29.50,
+                            spacesAvailable: 5,
+                            image: './Images/spanish.png'
                         },
                         {
                             id: 3,
-                            title: 'Geography',
-                            category: 'Geographical',
-                            description: 'In-depth Geography course, 6-month period',
-                            price: 69.99,
-                            quantity: 1,
-                            image: './Images/geography.png'
+                            title: 'German Language Lessons',
+                            category: 'Languages',
+                            location: 'MDX University, London',
+                            description: 'Basic German language course, 3-month period',
+                            price: 29.50,
+                            spacesAvailable: 5,
+                            image: './Images/german.png'
                         },
                         {
                             id: 4,
-                            title: 'English Literature',
+                            title: 'English Literature Lessons',
                             category: 'Languages',
-                            description: 'English Literature course, 6-month period',
+                            location: 'MDX University, London',
+                            description: 'Exploring English literature and major works, 6-month period',
                             price: 49.50,
-                            quantity: 1,
+                            spacesAvailable: 5,
                             image: './Images/englishLit.png'
                         },
                         {
                             id: 5,
-                            title: 'French',
+                            title: 'English Language Lessons',
                             category: 'Languages',
-                            description: 'French course, 3-month period',
-                            price: 29.50,
-                            quantity: 1,
-                            image: './Images/french.png'
+                            location: 'MDX University, London',
+                            description: 'English language course focusing on grammar and communication, 6-month period',
+                            price: 49.50,
+                            spacesAvailable: 5,
+                            image: './Images/englishLang.png'
+                        },
+                        {
+                            id: 6,
+                            title: 'Chemistry Lessons',
+                            category: 'Science',
+                            location: 'MDX University, London',
+                            description: 'Introduction to chemistry, covering basic principles and lab techniques, 6-month period',
+                            price: 59.99,
+                            spacesAvailable: 5,
+                            image: './Images/chemistry.png'
+                        },
+                        {
+                            id: 7,
+                            title: 'Biology Lessons',
+                            category: 'Science',
+                            location: 'MDX University, London',
+                            description: 'Study of life and living organisms, 6-month period',
+                            price: 59.99,
+                            spacesAvailable: 5,
+                            image: './Images/biology.png'
+                        },
+                        {
+                            id: 8,
+                            title: 'Physics Lessons',
+                            category: 'Science',
+                            location: 'MDX University, London',
+                            description: 'Fundamentals of physics including mechanics, waves, and energy, 6-month period',
+                            price: 59.99,
+                            spacesAvailable: 5,
+                            image: './Images/physics.png'
+                        },
+                        {
+                            id: 9,
+                            title: 'Astronomy and Solar System Studies',
+                            category: 'Science',
+                            location: 'MDX University, London',
+                            description: 'Exploring the solar system and basic astronomy, 6-month period',
+                            price: 69.99,
+                            spacesAvailable: 5,
+                            image: './Images/astronomy.png'
+                        },
+                        {
+                            id: 10,
+                            title: 'Computer Science Lessons',
+                            category: 'IT',
+                            location: 'MDX University, London',
+                            description: 'In-depth computer science course, 6-month period',
+                            price: 69.99,
+                            spacesAvailable: 5,
+                            image: './Images/computerScience.png'
+                        },
+                        {
+                            id: 11,
+                            title: 'Networking Lessons',
+                            category: 'IT',
+                            location: 'MDX University, London',
+                            description: 'Introduction to networking concepts and principles, 6-month period',
+                            price: 69.99,
+                            spacesAvailable: 5,
+                            image: './Images/networking.png'
+                        },
+                        {
+                            id: 12,
+                            title: 'Cyber Security Lessons',
+                            category: 'IT',
+                            location: 'MDX University, London',
+                            description: 'Covers cyber security fundamentals and online safety, 6-month period',
+                            price: 79.99,
+                            spacesAvailable: 5,
+                            image: './Images/cyberSecurity.png'
+                        },
+                        {
+                            id: 13,
+                            title: 'Artificial Intelligence and Machine Learning',
+                            category: 'IT',
+                            location: 'MDX University, London',
+                            description: 'Introductory course on AI and machine learning, 6-month period',
+                            price: 89.99,
+                            spacesAvailable: 5,
+                            image: './Images/artificialIntelligence.png'
+                        },
+                        {
+                            id: 14,
+                            title: 'Algebra Basics Lessons',
+                            category: 'Mathematics',
+                            location: 'MDX University, London',
+                            description: 'Introduction to algebra, covering equations and functions, 12-month period',
+                            price: 79.99,
+                            spacesAvailable: 5,
+                            image: './Images/algebra.png'
+                        },
+                        {
+                            id: 15,
+                            title: 'Geometry Essentials',
+                            category: 'Mathematics',
+                            location: 'MDX University, London',
+                            description: 'Covers shapes, angles, and basic geometric concepts, 12-month period',
+                            price: 69.99,
+                            spacesAvailable: 5,
+                            image: './Images/geometry.png'
+                        },
+                        {
+                            id: 16,
+                            title: 'Arithmetic Fundamentals',
+                            category: 'Mathematics',
+                            location: 'MDX University, London',
+                            description: 'Foundational arithmetic, including operations and fractions, 6-month period',
+                            price: 49.99,
+                            spacesAvailable: 5,
+                            image: './Images/arithmetic.png'
+                        },
+                        {
+                            id: 17,
+                            title: 'Advanced Algebra Lessons',
+                            category: 'Mathematics',
+                            location: 'MDX University, London',
+                            description: 'Covers advanced algebra topics like factoring and quadratic equations, 12-month period',
+                            price: 89.99,
+                            spacesAvailable: 5,
+                            image: './Images/algebra2.png'
+                        },
+                        {
+                            id: 18,
+                            title: 'World Geography Lessons',
+                            category: 'Geographical',
+                            location: 'MDX University, London',
+                            description: 'Exploring physical and political geography around the world, 6-month period',
+                            price: 49.50,
+                            spacesAvailable: 5,
+                            image: './Images/worldGeography.png'
+                        },
+                        {
+                            id: 19,
+                            title: 'World Politics Lessons',
+                            category: 'Geographical',
+                            location: 'MDX University, London',
+                            description: 'Introduction to global politics, systems, and policies, 6-month period',
+                            price: 59.50,
+                            spacesAvailable: 5,
+                            image: './Images/worldPolitics.png'
+                        },
+                        {
+                            id: 20,
+                            title: 'Environmental Geography Lessons',
+                            category: 'Geographical',
+                            location: 'MDX University, London',
+                            description: 'Focus on environmental issues and geography, 6-month period',
+                            price: 59.50,
+                            spacesAvailable: 5,
+                            image: './Images/environmentalGeography.png'
                         }
+
+
                     ],
                     cart: []
                 },
                 methods: {
-                    addToCart: function(product) {
+                    addToCart: function (product) {
                         this.cart.push(product);
                         console.log(`${product.title} added to cart.`);
                     }
