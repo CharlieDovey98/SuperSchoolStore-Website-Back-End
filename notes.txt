@@ -1,0 +1,19 @@
+Lessons - 20
+
+Languages:
+French, Spanish, German, Eng Lit, DEng Languages
+
+Science:
+Chemistry, Biology, Physics, Astronomy and Solar System Studies
+
+IT:
+Computer Science, Networking, Cyber Security, Artificial Intelligence and Machine Learning
+
+Mathmatical:
+DAlgebra Basics, Geometry Essentials, Arithmetic Fundamentals, Advanced Algebra
+
+Geographical:
+World Geography, World Politics, Environmental Geography 
+
+Log in functionality
+Checkout functionality
