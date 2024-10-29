@@ -1,17 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
     <title>SuperSchoolStore</title>
+    <link rel="stylesheet" href="/Public/CSS/style.css">
 </head>
+
 <body>
-    <div id="app">
-            <div class="indexPageHeader">
-                <h1>SuperSchoolStore</h1>
+    <div id="App">
+        <div class="headerContainer">
+            <header class="indexPageHeader">
+                <img src="./Images/education.png" alt="Logo" class="s3Logo">
+                <h1>SuperSchoolStore S3</h1>
+                <div class="checkoutDiv">
+                    <img src="./Images/shoppingCart.png" alt="Checkout" class="shoppingCartPNG">
+                    <p>Checkout</p>
+                </div>
+        </div>
+        </header>
+        <main>
+            <div class="product" v-for="product in products" :key="product.id">
+                <figure>
+                    <img v-bind:src="product.image" class="product-image" :alt="product.title">
+                </figure>
+                <div class="product-info">
+                    <h3 v-text="product.title"></h3>
+                    <p v-text="product.description"></p>
+                    <p>Price: £{{ product.price }}</p>
+                    <button  class="addButton" v-on:click="addToCart(product)">Add to Cart</button>
+                </div>
             </div>
-            
+        </main>
+
+        <div class="footerSection">
+            <div class="footerDiv">
+                <div>
+                    <a href="#" id="scrollToTop" >Back To The Top</a>
+                </div>
+                <p>SuperSchoolStore S3 &copy; 2023&nbsp;&nbsp;&nbsp;&nbsp;Created by Charlie Dovey M00843428.</p>
+            </div>
+        </div>
+        <script>
+            let app = new Vue({
+                el: '#App',
+                data: {
+                    products: [
+                        {
+                            id: 1,
+                            title: 'English Language',
+                            category: 'Languages',
+                            description: 'English Language course, 6-month period',
+                            price: 49.50,
+                            quantity: 1,
+                            image: './Images/englishLang.png'
+                        },
+                        {
+                            id: 2,
+                            title: 'Mathematics',
+                            category: 'Mathematics',
+                            description: 'Comprehensive Mathematics course, 12-month period',
+                            price: 79.99,
+                            quantity: 1,
+                            image: './Images/maths.png'
+                        },
+                        {
+                            id: 3,
+                            title: 'Geography',
+                            category: 'Geographical',
+                            description: 'In-depth Geography course, 6-month period',
+                            price: 69.99,
+                            quantity: 1,
+                            image: './Images/geography.png'
+                        },
+                        {
+                            id: 4,
+                            title: 'English Literature',
+                            category: 'Languages',
+                            description: 'English Literature course, 6-month period',
+                            price: 49.50,
+                            quantity: 1,
+                            image: './Images/englishLit.png'
+                        },
+                        {
+                            id: 5,
+                            title: 'French',
+                            category: 'Languages',
+                            description: 'French course, 3-month period',
+                            price: 29.50,
+                            quantity: 1,
+                            image: './Images/french.png'
+                        }
+                    ],
+                    cart: []
+                },
+                methods: {
+                    addToCart: function(product) {
+                        this.cart.push(product);
+                        console.log(`${product.title} added to cart.`);
+                    }
+                }
+            });
+        </script>
     </div>
 </body>
+
 </html>

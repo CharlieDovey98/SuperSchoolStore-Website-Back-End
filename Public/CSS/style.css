@@ -1,6 +1,166 @@
+/* General Styling */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  background-color: #263135;
+  color: white;
+  min-height: 100vh;
+}
+#App {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  flex-grow: 1;
+}
+/* ----- */
+/* Header Styling */
+.headerContainer {
+  width: 100%;
+  background-color: #26586a;
+  border-bottom: 3px solid #263135;
+  padding: 10px 0;
+  margin: 0 0 5% 0;
+}
+
 .indexPageHeader {
-
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Pushes content to the ends */
+  padding: 0 20px;
 }
+
+.s3Logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 15px;
+}
+
 .indexPageHeader h1 {
-
+  font-size: 2em;
+  color: white;
 }
+
+.checkoutDiv {
+  display: flex;
+  align-items: center;
+}
+
+.checkoutDiv:hover {
+  cursor: pointer;
+}
+
+.shoppingCartPNG {
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
+}
+
+.checkoutDiv p {
+  color: white;
+  font-size: 1em;
+  margin: 0;
+}
+/* ----- */
+/* Main Layout */
+main {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* ----- */
+/* Product Styling */
+.product {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+}
+
+.product-image {
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-info h3 {
+  font-size: 1.5em;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.product-info p {
+  color: #666;
+  margin-bottom: 8px;
+}
+/* ----- */
+/* Button Styling */
+.addButton {
+  background-color: #437283;
+  border: none;
+  width: 150px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.addButton:hover {
+  background-color: #2990b6;
+}
+/* ----- */
+/* Footer Styling */
+
+.footerSection {
+  height: 10vh;
+  width: 100%;
+}
+
+.footerDiv {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 100px 0px 0px 0px;
+  padding: 10px 0px 0px 0px;
+  border-color: #2990b6;
+  border-top-style: solid;
+}
+
+.footerDiv p {
+  padding: 10px 0px 0px 0px;
+}
+
+#scrollToTop {
+  color: white;
+  text-align: center;
+  text-decoration: underline;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0px 0px 5px 0px;
+}
+
+#scrollToTop:hover {
+  color: #2990b6;
+}
+
+/* ----- */
