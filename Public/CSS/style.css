@@ -80,10 +80,10 @@ main {
 }
 
 .homeDiv p {
-    color: rgb(183, 201, 207);
-    font-size: 2em;
-    margin: 0;
-  }
+  color: rgb(183, 201, 207);
+  font-size: 2em;
+  margin: 0;
+}
 
 .indexPageHeader h1 {
   font-size: 2em;
@@ -142,7 +142,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 40px;
-  background-color: #dbdbdb;
+  background-color: white;
   padding: 30px;
   border-radius: 8px;
   max-width: 80%;
@@ -188,7 +188,6 @@ main {
 
 .aboutUs strong {
   color: #26586a;
-  cursor: pointer;
 }
 
 #shopAllLessons {
@@ -242,7 +241,6 @@ main {
 
 /* Shopping 'Page' Styling */
 #shoppingPage {
-  display: none;
   background-color: white;
   padding: 20px;
   border-radius: 8px;
@@ -254,8 +252,9 @@ main {
 /* Product Styling */
 .product {
   display: flex;
-  align-items: flex-start;
-  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
   margin-bottom: 20px;
   border-bottom: 1px solid #ddd;
   padding-bottom: 15px;
@@ -270,6 +269,7 @@ main {
 .product-info {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .product-info h3 {
@@ -280,23 +280,159 @@ main {
 
 .product-info p {
   color: #666;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.product-info p strong {
+  font-size: 1em;
+  font-weight: bold;
+  color: #555;
+}
+
+.lesson-add-button-div {
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 /* Button Styling */
 .addButton {
   background-color: #437283;
   border: none;
-  width: 150px;
-  padding: 10px 15px;
+  width: 100%;
+  padding: 10px 0;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
+  text-align: center;
+  white-space: nowrap;
   transition: background-color 0.3s ease;
-  margin-top: 10px;
 }
 
 .addButton:hover {
+  background-color: #2990b6;
+}
+/* ----- */
+
+/* Checkout 'Page' Styling */
+#checkoutPage {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 20px auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  color: #555;
+}
+
+/* Checkout Header */
+#checkoutPage h2 {
+  font-size: 1.8em;
+  color: #26586a;
+  border-bottom: 2px solid #2990b6;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Cart Items List */
+#checkoutPage ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+#checkoutPage ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+#checkoutPage ul li button {
+  background-color: #437283;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+#checkoutPage ul li button:hover {
+  background-color: #2990b6;
+}
+
+.lessons-in-cart{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.productImageInCart {
+  width: 60px;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* User information & payment form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+form label {
+  font-weight: bold;
+  color: #26586a;
+  font-size: 1em;
+  margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+form h3 {
+  font-size: 1.2em;
+  color: #26586a;
+  margin-bottom: 5px;
+}
+
+form button {
+  background-color: #437283;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  margin-top: 15px;
+}
+
+form button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+form button:hover:enabled {
   background-color: #2990b6;
 }
 /* ----- */
