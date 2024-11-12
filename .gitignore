@@ -1,0 +1,4 @@
+#Git ignore file to ignore pushing specified files.
+
+*.txt
+node_modules/
