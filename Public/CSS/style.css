@@ -131,6 +131,10 @@ main {
   font-size: 1em;
   margin: 0;
 }
+
+.cartItems {
+  margin-left: 5px;
+}
 /* ----- */
 
 /* Landing 'Page' Styling */

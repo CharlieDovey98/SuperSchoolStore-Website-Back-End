@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,17 +18,17 @@
         <div id="headerContainer">
             <header class="indexPageHeader">
                 <div class="homeDiv" onclick="toggleAboutUs()">
-                    <img src="./Images/education.png" alt="Logo" class="s3Logo">
+                    <img src="Images/education.png" alt="Logo" class="s3Logo">
                     <p>S3</p>
                 </div>
                 <h1>SuperSchoolStore</h1>
                 <div class="shoppingDiv" onclick="toggleShoppingPage()">
-                    <img src="./Images/certificate.png" alt="Go To Shop" class="shopLessonsPNG">
+                    <img src="Images/certificate.png" alt="Go To Shop" class="shopLessonsPNG">
                     <p>Go Shopping</p>
                 </div>
                 <div class="checkoutDiv" onclick="toggleCheckoutPage()">
-                    <img src="./Images/shoppingCart.png" alt="Checkout" class="shoppingCartPNG">
-                    <p>Checkout</p>
+                    <img src="Images/shoppingCart.png" alt="Checkout" class="shoppingCartPNG">
+                    <p>Checkout </p><span class="cartItems">{{itemsInTheCart}}</span>
                 </div>
         </div>
         </header>
@@ -119,13 +120,15 @@
                     </div>
                 </div>
             </section>
-
+            <section id="checkoutPage">
+            </section>
 
 
             <div class="footerSection">
                 <div class="footerDiv">
                     <div>
-                        <a href="#" id="scrollToTop">Scroll To The Top</a>
+                        <a href="#" v-on:click.prevent="scrollToTop" id="scrollToTop">Scroll To The Top</a>
+
                     </div>
                     <p>SuperSchoolStore S3 &copy; 2024&nbsp;&nbsp;&nbsp;&nbsp;Created by Charlie Dovey M00843428.</p>
                 </div>
@@ -144,7 +147,7 @@
                             description: 'Comprehensive French language course, 3-month period',
                             price: 29.50,
                             spacesAvailable: 5,
-                            image: './Images/french.png'
+                            image: 'Images/french.png'
                         },
                         {
                             id: 2,
@@ -154,7 +157,7 @@
                             description: 'Spanish language course for beginners, 3-month period',
                             price: 29.50,
                             spacesAvailable: 5,
-                            image: './Images/spanish.png'
+                            image: 'Images/spanish.png'
                         },
                         {
                             id: 3,
@@ -164,7 +167,7 @@
                             description: 'Basic German language course, 3-month period',
                             price: 29.50,
                             spacesAvailable: 5,
-                            image: './Images/german.png'
+                            image: 'Images/german.png'
                         },
                         {
                             id: 4,
@@ -174,7 +177,7 @@
                             description: 'Exploring English literature and major works, 6-month period',
                             price: 49.50,
                             spacesAvailable: 5,
-                            image: './Images/englishLit.png'
+                            image: 'Images/englishLit.png'
                         },
                         {
                             id: 5,
@@ -184,7 +187,7 @@
                             description: 'English language course focusing on grammar and communication, 6-month period',
                             price: 49.50,
                             spacesAvailable: 5,
-                            image: './Images/englishLang.png'
+                            image: 'Images/englishLang.png'
                         },
                         {
                             id: 6,
@@ -194,7 +197,7 @@
                             description: 'Introduction to chemistry, covering basic principles and lab techniques, 6-month period',
                             price: 59.99,
                             spacesAvailable: 5,
-                            image: './Images/chemistry.png'
+                            image: 'Images/chemistry.png'
                         },
                         {
                             id: 7,
@@ -204,7 +207,7 @@
                             description: 'Study of life and living organisms, 6-month period',
                             price: 59.99,
                             spacesAvailable: 5,
-                            image: './Images/biology.png'
+                            image: 'Images/biology.png'
                         },
                         {
                             id: 8,
@@ -214,7 +217,7 @@
                             description: 'Fundamentals of physics including mechanics, waves, and energy, 6-month period',
                             price: 59.99,
                             spacesAvailable: 5,
-                            image: './Images/physics.png'
+                            image: 'Images/physics.png'
                         },
                         {
                             id: 9,
@@ -224,7 +227,7 @@
                             description: 'Exploring the solar system and basic astronomy, 6-month period',
                             price: 69.99,
                             spacesAvailable: 5,
-                            image: './Images/astronomy.png'
+                            image: 'Images/astronomy.png'
                         },
                         {
                             id: 10,
@@ -234,7 +237,7 @@
                             description: 'In-depth computer science course, 6-month period',
                             price: 69.99,
                             spacesAvailable: 5,
-                            image: './Images/computerScience.png'
+                            image: 'Images/computerScience.png'
                         },
                         {
                             id: 11,
@@ -244,7 +247,7 @@
                             description: 'Introduction to networking concepts and principles, 6-month period',
                             price: 69.99,
                             spacesAvailable: 5,
-                            image: './Images/networking.png'
+                            image: 'Images/networking.png'
                         },
                         {
                             id: 12,
@@ -254,7 +257,7 @@
                             description: 'Covers cyber security fundamentals and online safety, 6-month period',
                             price: 79.99,
                             spacesAvailable: 5,
-                            image: './Images/cyberSecurity.png'
+                            image: 'Images/cyberSecurity.png'
                         },
                         {
                             id: 13,
@@ -264,7 +267,7 @@
                             description: 'Introductory course on AI and machine learning, 6-month period',
                             price: 89.99,
                             spacesAvailable: 5,
-                            image: './Images/artificialIntelligence.png'
+                            image: 'Images/artificialIntelligence.png'
                         },
                         {
                             id: 14,
@@ -274,7 +277,7 @@
                             description: 'Introduction to algebra, covering equations and functions, 12-month period',
                             price: 79.99,
                             spacesAvailable: 5,
-                            image: './Images/algebra.png'
+                            image: 'Images/algebra.png'
                         },
                         {
                             id: 15,
@@ -284,7 +287,7 @@
                             description: 'Covers shapes, angles, and basic geometric concepts, 12-month period',
                             price: 69.99,
                             spacesAvailable: 5,
-                            image: './Images/geometry.png'
+                            image: 'Images/geometry.png'
                         },
                         {
                             id: 16,
@@ -294,7 +297,7 @@
                             description: 'Foundational arithmetic, including operations and fractions, 6-month period',
                             price: 49.99,
                             spacesAvailable: 5,
-                            image: './Images/arithmetic.png'
+                            image: 'Images/arithmetic.png'
                         },
                         {
                             id: 17,
@@ -304,7 +307,7 @@
                             description: 'Covers advanced algebra topics like factoring and quadratic equations, 12-month period',
                             price: 89.99,
                             spacesAvailable: 5,
-                            image: './Images/algebra2.png'
+                            image: 'Images/algebra2.png'
                         },
                         {
                             id: 18,
@@ -314,7 +317,7 @@
                             description: 'Exploring physical and political geography around the world, 6-month period',
                             price: 49.50,
                             spacesAvailable: 5,
-                            image: './Images/worldGeography.png'
+                            image: 'Images/worldGeography.png'
                         },
                         {
                             id: 19,
@@ -324,7 +327,7 @@
                             description: 'Introduction to global politics, systems, and policies, 6-month period',
                             price: 59.50,
                             spacesAvailable: 5,
-                            image: './Images/worldPolitics.png'
+                            image: 'Images/worldPolitics.png'
                         },
                         {
                             id: 20,
@@ -334,18 +337,33 @@
                             description: 'Focus on environmental issues and geography, 6-month period',
                             price: 59.50,
                             spacesAvailable: 5,
-                            image: './Images/environmentalGeography.png'
+                            image: 'Images/environmentalGeography.png'
                         }
 
 
                     ],
                     cart: []
                 },
+                computed: {
+                    itemsInTheCart: function () {
+                        if (this.cart.length == 0) {
+                            return ""
+                        } else if (this.cart.length == 1) {
+                            return `${this.cart.length} item`;
+                        } else {
+                            return `${this.cart.length} items`;
+                        }
+                    }
+                },
                 methods: {
                     addToCart: function (product) {
-                        this.cart.push(product);
+                        this.cart.push(product.id);
                         console.log(`${product.title} added to cart.`);
+                    },
+                    scrollToTop() {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
+
                 }
             });
         </script>
