@@ -3,61 +3,61 @@
 // Use: ctrl ^c to stop the server.
 
 const express = require("express");
-const path = require("path");
-const http = require("http");
-const morgan = require("morgan");
-const db = require("./mongoDB");  // Make sure this is correctly configured in mongoDB.js
+//const path = require("path");
+//const http = require("http");
+//const morgan = require("morgan");
+const db = require("./mongoDB"); // Make sure this is correctly configured in mongoDB.js
 
 // Calls the express function to start a new Express application
 const app = express();
 
 // Middleware to log requests
-app.use(morgan("dev"));
-
-// Serve static files from the 'Public' directory
-app.use(express.static(path.join(__dirname, "Public")));
+//app.use(morgan("dev"));
 
 // Middleware to parse JSON requests
 app.use(express.json());
 
 // Middleware to log additional request details
 app.use((request, response, next) => {
-  console.log("Request coming in " + request.method + " to " + request.url);
-  console.log("Request IP: " + request.ip);
-  console.log("Request date: " + new Date());
+  console.log(
+    "Request coming in: " +
+      request.method +
+      " to " +
+      request.url +
+      "\nRequest IP: " +
+      request.ip +
+      "\nRequest date: " +
+      new Date()
+  );
   next();
 });
 
-// Route to index.html. Need to seperate the repos and alter the code.
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../index.html"));
+// Error handling middleware.
+app.use((error, req, res, next) => {
+  console.error("Error encountered:", err);
+  res.status(500).json({ error: "An internal error occurred" });
 });
 
-// MongoDB route to fetch all documents in a collection.
+// MongoDB route parameter to fetch all documents in a collection.
 app.param("collectionName", (req, res, next, collectionName) => {
   req.collection = db.collection(collectionName);
   return next();
 });
-
+// Get route to attain the data stored in a collection, using the parameter 'collectionName'.
 app.get("/collections/:collectionName", async (req, res, next) => {
   try {
     const results = await req.collection.find({}).toArray();
-    res.json(results);
-  } catch (err) {
-    next(err);
+    res.json(results); // Respond with the result in JSON format.
+  } catch (error) {
+    next(error);
   }
-});
-
-// Error handling middleware.
-app.use((err, req, res, next) => {
-  console.error("Error encountered:", err);
-  res.status(500).json({ error: "An internal error occurred" });
 });
 
 // Define the port for the server to listen on.
 const port = 3000;
 
 // Start the server on port 3000.
-http.createServer(app).listen(port, () => {
-  console.log(`Werbserver started at http://localhost:${port}`);
+app.use(express.static("public"));
+app.listen(port, () => {
+  console.log(`Webserver started at http://localhost:${port}`);
 });
