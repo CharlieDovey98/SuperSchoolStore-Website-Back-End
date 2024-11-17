@@ -4,7 +4,10 @@ let app = new Vue({
   el: "#App",
   data: {
     currentPage: "aboutUs", // currentPage sets the landing page to be presented on website interaction and allows tracking of the current page.
-    products: [], // Procucts is inicialised empty ad will attain the lessons from mongoDB database products collectoin.
+    products: [], // Procucts is inicialised empty and will attain the lessons from mongoDB database products collection.
+    searchQuery: "", // A string for keyword searching.
+    selectedSort: "", // Selected key for sorting (location, price, length, availability, subject).
+    sortOrder: "", // Ascending, descending or no sorting order.
     cart: [], // Cart is inicialised to empty and will update when the user adds lessons to their cart or removes them.
     sales: { customerPurchases: 101 },
     user: {
@@ -24,6 +27,51 @@ let app = new Vue({
     },
   },
   computed: {
+    // A computed method to filter and sort the lessons on the shopping page by a keyword search of filter options.
+    filterAndSortProducts() {
+      let filteredProducts = this.products; // Initialise an array with the products from the database.
+
+      // Filter products by keyword search.
+      if (this.searchQuery) {
+        // If a Keyword is searched for.
+        const query = this.searchQuery.toLowerCase();
+        // Filter lowercased keyword query through lesson title, description, category and location for a match.
+        filteredProducts = filteredProducts.filter( (product) =>
+            product.title.toLowerCase().includes(query) ||
+            product.description.toLowerCase().includes(query) ||
+            product.category.toLowerCase().includes(query) ||
+            product.location.toLowerCase().includes(query)
+        );
+      }
+
+      // If statement to sort products by selected attribute and order.
+      if (this.selectedSort) { // If a sort attribute is selected.
+        // Copy and sort the array based on the comparison of the selected attribute.
+        filteredProducts = filteredProducts.slice().sort((a, b) => {
+          let valueOne = a[this.selectedSort];
+          let valueTwo = b[this.selectedSort];
+
+          // If the type of the first value is a string, make both values lowercased for equal comparison.
+          if (typeof valueOne === "string") {
+            valueOne = valueOne.toLowerCase();
+            valueTwo = valueTwo.toLowerCase();
+          }
+
+          // Compare and return the values based on the selected sort order.
+          if (this.sortOrder === "ascending") {
+            return valueOne > valueTwo ? 1 : valueOne < valueTwo ? -1 : 0; // Ternary operator to move values based on the condition of ascending or descending.
+          } else if (this.sortOrder === "descending") {
+            return valueOne < valueTwo ? 1 : valueOne > valueTwo ? -1 : 0;
+          } else {
+            return 0; // If no sort order is selected, return the products as they are.
+          }
+        });
+      }
+
+      return filteredProducts; // Return the filtered products list.
+    },
+
+    // A computed method to update the display at the top right of the website, showing the amount of items in the cart.
     itemsInTheCart: function () {
       if (this.cart.length == 0) {
         return "";
@@ -33,6 +81,8 @@ let app = new Vue({
         return `${this.cart.length} items`;
       }
     },
+    
+    // A computed method to check whether a user can complete checkout.
     canCheckout() {
       return (
         this.user.firstName &&
@@ -54,6 +104,13 @@ let app = new Vue({
       } catch (error) {
         console.error("Error fetching products from Database:", this.products);
       }
+    },
+
+    // A method to clear the keyword searching, filters and sorting options.
+    resetFilters() {
+      this.selectedSort = "";
+      this.sortOrder = "";
+      this.searchQuery = "";
     },
 
     // A method to add lessons from the shopping page to the users 'Cart'.

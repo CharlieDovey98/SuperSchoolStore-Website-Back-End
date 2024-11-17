@@ -110,24 +110,86 @@
             </section>
             <!-- Below is the shopping 'page' and lesson purchase aspect of the website-->
             <section id="shoppingPage" v-show="currentPage === 'shopping'">
-                <h2>Our course on offer:</h2>
-                <div class="product" v-for="product in products" :key="product.id">
+                <h2>Available S3 Lessons, Start Your Learning Here:</h2>
+
+                <div class="filter-by-div">
+                    <!-- Below is the keyword search, section of the lessons webpage. -->
+                    <div>
+                        <input class="keyword-search" type="text" v-model="searchQuery"
+                            placeholder=" Search For lessons..." />
+                    </div>
+                    <!-- Below of the checkbox, filtering section of lessons webpage. -->
+                    <div class="lesson-filters-containment-div">
+                        <div class="inner-filters-div">
+                            <label class="filter-by-label">
+                                <!-- Type="radio" allows for checkboxes to be linked by name="", with only one selected at a time. -->
+                                <input class="lessons-sort-checkbox" type="radio" name="sort-option" value="category"
+                                    v-model="selectedSort" />
+                                Subject
+                            </label>
+                            <label class="filter-by-label">
+                                <input class="lessons-sort-checkbox" type="radio" name="sort-option" value="location"
+                                    v-model="selectedSort" />
+                                Location
+                            </label>
+                            <label class="filter-by-label">
+                                <input class="lessons-sort-checkbox" type="radio" name="sort-option" value="price"
+                                    v-model="selectedSort" />
+                                Price
+                            </label>
+                            <label class="filter-by-label">
+                                <input class="lessons-sort-checkbox" type="radio" name="sort-option" value="courseLength"
+                                    v-model="selectedSort" />
+                                Length
+                            </label>
+                            <label class="filter-by-label">
+                                <input class="lessons-sort-checkbox" type="radio" name="sort-option"
+                                    value="spacesAvailable" v-model="selectedSort" />
+                                Availability
+                            </label>
+                        </div>
+                        <div class="inner-filters-div">
+                            <label class="filter-by-label">
+                                <input class="lessons-sort-checkbox" type="radio" name="display-option"
+                                    value="ascending" v-model="sortOrder" />
+                                Ascending
+                            </label>
+                            <label class="filter-by-label">
+                                <input class="lessons-sort-checkbox" type="radio" name="display-option"
+                                    value="descending" v-model="sortOrder" />
+                                Descending
+                            </label>
+                            <label class="filter-by-label">
+                                <input class="lessons-sort-checkbox" type="radio" name="display-option"
+                                v-on:change="resetFilters()"/>
+                                No filters
+                            </label>
+                        </div>
+
+                    </div>
+
+                </div>
+                <p class="filter-information-prompt">Please refine your search through the filters and keyword searching
+                    above.</p>
+                <div class="product" v-for="product in filterAndSortProducts" :key="product.id">
                     <figure>
                         <img v-bind:src="product.image" class="product-image" :alt="product.title">
                     </figure>
                     <div class="product-info">
                         <h3 v-text="product.title"></h3>
                         <p v-text="product.description"></p>
-                        <p><strong>Price: £ </strong>{{ product.price }}</p>
                         <!-- {{}} double braces is text interpolation, allowing data to be manupulated within. -->
-                        <p><strong>Location: </strong>{{ product.location }}</p>
-                        <p><strong>spaces Available: </strong>{{ product.spacesAvailable }}</p>
-
+                        <p><strong>Subject:</strong> {{ product.category }}</p>
+                        <p><strong>Location:</strong> {{ product.location }}</p>
+                        <p><strong>Price:</strong> £{{ product.price }}</p>
+                        <p><strong>Spaces Available:</strong> {{ product.spacesAvailable }}</p>
+                        <p><strong>Length:</strong> {{ product.courseLength }} months</p>
                     </div>
                     <div class="lesson-add-button-div">
                         <button class="addButton" v-on:click="addToCart(product)">Add to Cart</button>
                     </div>
                 </div>
+
             </section>
             <!-- Below is the checkout 'page' and lesson purchasing aspect of the website-->
             <section id="checkoutPage" v-show="currentPage === 'checkout'">
@@ -174,22 +236,21 @@
                     </label>
                     <label>
                         Confirm Password:
-                        <input type="password" v-model="user.confirmPassword" required />
+                        <input type="password" v-model="user.confirmPassword" required m/>
                     </label>
 
                     <h3>Payment Information</h3>
                     <label>
                         Card Number:
-                        <input type="text" v-model="payment.cardNumber" placeholder="#### #### #### ####" maxlength="16"
-                            required />
+                        <input type="text" v-model="payment.cardNumber" placeholder="#### #### #### ####" maxlength="16" minlength="16" required />
                     </label>
                     <label>
                         Expiry Date:
-                        <input type="text" v-model="payment.expiryDate" placeholder="MM/YY" required />
+                        <input type="text" v-model="payment.expiryDate" placeholder="MM/YY" maxlength="4" minlength="4" required/>
                     </label>
                     <label>
                         CVV:
-                        <input type="text" v-model="payment.cvv" maxlength="3" placeholder="###" required />
+                        <input type="text" v-model="payment.cvv" placeholder="###"  maxlength="3" minlength="3" required/>
                     </label>
 
                     <!-- Below is the terms and conditions checkbox -->
@@ -198,7 +259,7 @@
                         I have read and agree to the Terms and Conditions
                     </label>
 
-                    <button type="submit" :disabled="!canCheckout">Checkout</button>
+                    <button type="submit" v-on:click="canCheckout">Checkout</button>
                 </form>
             </section>
 
