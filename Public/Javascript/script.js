@@ -4,7 +4,7 @@ let app = new Vue({
   el: "#App",
   data: {
     currentPage: "aboutUs", // currentPage sets the landing page to be presented on website interaction and allows tracking of the current page.
-    products: [], // Procucts is inicialised empty and will attain the lessons from mongoDB database products collection.
+    lessons: [], // Procucts is inicialised empty and will attain the lessons from mongoDB database lessons collection.
     searchQuery: "", // A string for keyword searching.
     selectedSort: "", // Selected key for sorting (location, price, length, availability, subject).
     sortOrder: "", // Ascending, descending or no sorting order.
@@ -26,31 +26,31 @@ let app = new Vue({
       cvv: "",
     },
   },
-  
+
   computed: {
     // A computed method to filter and sort the lessons on the shopping page by a keyword search of filter options.
-    filterAndSortProducts() {
-      let filteredProducts = this.products; // Initialise an array with the products from the database.
+    filterAndSortLessons() {
+      let filteredLessons = this.lessons; // Initialise an array with the lessons from the database.
 
-      // Filter products by keyword search.
+      // Filter lessons by keyword search.
       if (this.searchQuery) {
         // If a Keyword is searched for.
         const query = this.searchQuery.toLowerCase();
-        // Filter lowercased keyword query through lesson title, description, category and location for a match.
-        filteredProducts = filteredProducts.filter(
-          (product) =>
-            product.title.toLowerCase().includes(query) ||
-            product.description.toLowerCase().includes(query) ||
-            product.category.toLowerCase().includes(query) ||
-            product.location.toLowerCase().includes(query)
+        // Filter lowercased keyword query through lesson title, description, subject and location for a match.
+        filteredLessons = filteredLessons.filter(
+          (lesson) =>
+            lesson.title.toLowerCase().includes(query) ||
+            lesson.description.toLowerCase().includes(query) ||
+            lesson.subject.toLowerCase().includes(query) ||
+            lesson.location.toLowerCase().includes(query)
         );
       }
 
-      // If statement to sort products by selected attribute and order.
+      // If statement to sort lessons by selected attribute and order.
       if (this.selectedSort) {
         // If a sort attribute is selected.
         // Copy and sort the array based on the comparison of the selected attribute.
-        filteredProducts = filteredProducts.slice().sort((a, b) => {
+        filteredLessons = filteredLessons.slice().sort((a, b) => {
           let valueOne = a[this.selectedSort];
           let valueTwo = b[this.selectedSort];
 
@@ -66,12 +66,12 @@ let app = new Vue({
           } else if (this.sortOrder === "descending") {
             return valueOne < valueTwo ? 1 : valueOne > valueTwo ? -1 : 0;
           } else {
-            return 0; // If no sort order is selected, return the products as they are.
+            return 0; // If no sort order is selected, return the lessons as they are.
           }
         });
       }
 
-      return filteredProducts; // Return the filtered products list.
+      return filteredLessons; // Return the filtered lessons list.
     },
 
     // A computed method to update the display at the top right of the website, showing the amount of items in the cart.
@@ -98,15 +98,32 @@ let app = new Vue({
   },
 
   methods: {
-    // A try catch to populate products with MongoDB database products collection.
-    async fetchProducts() {
+    // A try catch to populate lessons with MongoDB database lessons collection.
+    async fetchLessons() {
       try {
-        const response = await fetch("/collections/products");
+        const response = await fetch("/collections/lessons");
         const data = await response.json();
-        this.products = data;
-        console.log("Fetched products:", this.products);
+        this.lessons = data;
+        console.log("Fetched lessons:", this.lessons);
       } catch (error) {
-        console.error("Error fetching products from Database:", this.products);
+        console.error("Error fetching lessons from Database:", this.lessons);
+      }
+    },
+
+    // Fetch filtered and sorted lessons
+    async fetchFilteredAndSortedLessons() {
+      try {
+        const sortAspect = this.selectedSort || "subject"; // Default sort by 'subject'
+        const sortOrder = this.sortOrder || "ascending"; // Default order is ascending
+
+        const response = await fetch(
+          `/collections/lessons/${sortAspect}/${sortOrder}`
+        );
+        const data = await response.json();
+        this.lessons = data; // Update local array with the filtered/sorted lessons
+        console.log("Fetched filtered and sorted lessons:", this.lessons);
+      } catch (error) {
+        console.error("Error fetching filtered and sorted lessons:", error);
       }
     },
 
@@ -118,24 +135,26 @@ let app = new Vue({
     },
 
     // A method to add lessons from the shopping page to the users 'Cart'.
-    addToCart(product) {
-      // If there is space available, add the product to the cart and reduce the spaces left.
-      if (product.spacesAvailable > 0) {
-        this.cart.push(product);
-        product.spacesAvailable -= 1;
-        console.log(`${product.title} added to cart. Spaces remaining: ${product.spacesAvailable}`);
+    addToCart(lesson) {
+      // If there is space available, add the lesson to the cart and reduce the spaces left.
+      if (lesson.spacesAvailable > 0) {
+        this.cart.push(lesson);
+        lesson.spacesAvailable -= 1;
+        console.log(
+          `${lesson.title} added to cart. Spaces remaining: ${lesson.spacesAvailable}`
+        );
       } else {
       }
     },
 
     // A method to remove lessons from the users 'Cart'.
-    removeFromCart(productIndex) {
+    removeFromCart(lessonIndex) {
       // Remove the lesson from the cart and update the spaces available.
-      const product = this.cart[productIndex];
-      product.spacesAvailable += 1;
-      this.cart.splice(productIndex, 1);
+      const lesson = this.cart[lessonIndex];
+      lesson.spacesAvailable += 1;
+      this.cart.splice(lessonIndex, 1);
       console.log(
-        `${product.title} removed from cart. Spaces remaining: ${product.spacesAvailable}`
+        `${lesson.title} removed from cart. Spaces remaining: ${lesson.spacesAvailable}`
       );
     },
 
@@ -194,6 +213,6 @@ let app = new Vue({
     },
   },
   created() {
-    this.fetchProducts(); // Call fetchProducts() method when the Vue instance is created.
+    this.fetchLessons(); // Call fetchLessons() method when the Vue instance is created.
   },
 });

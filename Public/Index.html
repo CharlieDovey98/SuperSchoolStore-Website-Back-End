@@ -123,7 +123,7 @@
                         <div class="inner-filters-div">
                             <label class="filter-by-label">
                                 <!-- Type="radio" allows for checkboxes to be linked by name="", with only one selected at a time. -->
-                                <input class="lessons-sort-checkbox" type="radio" name="sort-option" value="category"
+                                <input class="lessons-sort-checkbox" type="radio" name="sort-option" value="subject"
                                     v-model="selectedSort" />
                                 Subject
                             </label>
@@ -138,8 +138,8 @@
                                 Price
                             </label>
                             <label class="filter-by-label">
-                                <input class="lessons-sort-checkbox" type="radio" name="sort-option" value="courseLength"
-                                    v-model="selectedSort" />
+                                <input class="lessons-sort-checkbox" type="radio" name="sort-option"
+                                    value="courseLength" v-model="selectedSort" />
                                 Length
                             </label>
                             <label class="filter-by-label">
@@ -161,7 +161,7 @@
                             </label>
                             <label class="filter-by-label">
                                 <input class="lessons-sort-checkbox" type="radio" name="display-option"
-                                v-on:change="resetFilters()"/>
+                                    v-on:change="resetFilters()" />
                                 No filters
                             </label>
                         </div>
@@ -171,27 +171,30 @@
                 </div>
                 <p class="filter-information-prompt">Please refine your search through the filters and keyword searching
                     above.</p>
-                <div class="product" v-for="product in filterAndSortProducts" :key="product.id">
+                <div class="lesson" v-for="lesson in filterAndSortLessons" :key="lesson.id">
                     <figure>
-                        <img v-bind:src="product.image" class="product-image" :alt="product.title">
+                        <img v-bind:src="lesson.image" class="lesson-image" :alt="lesson.title">
                     </figure>
-                    <div class="product-info">
-                        <h3 v-text="product.title"></h3>
-                        <p v-text="product.description"></p>
+                    <div class="lesson-info">
+                        <h3 v-text="lesson.title"></h3>
+                        <p v-text="lesson.description"></p>
                         <!-- {{}} double braces is text interpolation, allowing data to be manupulated within. -->
-                        <p><strong>Subject:</strong> {{ product.category }}</p>
-                        <p><strong>Location:</strong> {{ product.location }}</p>
-                        <p><strong>Price:</strong> £{{ product.price }}</p>
-                        <p><strong>Spaces Available:</strong> 
-                            <span v-if="product.spacesAvailable === 0">No spaces left</span>
-                            <span v-else-if="product.spacesAvailable <= 1">Hurry, only {{ product.spacesAvailable }} space left!</span>
-                            <span v-else-if="product.spacesAvailable <= 3">Hurry, only {{ product.spacesAvailable }} spaces left!</span>
-                            <span v-else>{{ product.spacesAvailable }} spaces available</span>
+                        <p><strong>Subject:</strong> {{ lesson.subject }}</p>
+                        <p><strong>Location:</strong> {{ lesson.location }}</p>
+                        <p><strong>Price:</strong> £{{ lesson.price }}</p>
+                        <p><strong>Spaces Available:</strong>
+                            <span v-if="lesson.spacesAvailable === 0">No spaces left</span>
+                            <span v-else-if="lesson.spacesAvailable <= 1">Hurry, only {{ lesson.spacesAvailable }} space
+                                left!</span>
+                            <span v-else-if="lesson.spacesAvailable <= 3">Hurry, only {{ lesson.spacesAvailable }}
+                                spaces left!</span>
+                            <span v-else>{{ lesson.spacesAvailable }} spaces available</span>
                         </p>
-                        <p><strong>Length:</strong> {{ product.courseLength }} months</p>
+                        <p><strong>Length:</strong> {{ lesson.courseLength }} months</p>
                     </div>
                     <div class="lesson-add-button-div">
-                        <button id="addLessonToCartButton" class="addButton" v-on:click="addToCart(product)" v-if="product.spacesAvailable > 0">Add to Cart</button>
+                        <button id="addLessonToCartButton" class="addButton" v-on:click="addToCart(lesson)"
+                            v-if="lesson.spacesAvailable > 0">Add to Cart</button>
                     </div>
                 </div>
 
@@ -201,14 +204,14 @@
                 <h2>Checkout</h2>
                 <div v-if="cart.length">
                     <ul>
-                        <li v-for="(product, products) in cart" :key="product.id">
+                        <li v-for="(lesson, lessons) in cart" :key="lesson.id">
                             <div class="lessons-in-cart">
                                 <figure>
-                                    <img v-bind:src="product.image" class="productImageInCart" :alt="product.title">
+                                    <img v-bind:src="lesson.image" class="lessonImageInCart" :alt="lesson.title">
                                 </figure>
-                                {{ product.title }} at {{product.location}} £{{ product.price }}
+                                {{ lesson.title }} at {{lesson.location}} £{{ lesson.price }}
                             </div>
-                            <button v-on:click="removeFromCart(products)">Remove</button>
+                            <button v-on:click="removeFromCart(lessons)">Remove</button>
                         </li>
                     </ul>
                 </div>
@@ -241,21 +244,24 @@
                     </label>
                     <label>
                         Confirm Password:
-                        <input type="password" v-model="user.confirmPassword" required m/>
+                        <input type="password" v-model="user.confirmPassword" required m />
                     </label>
 
                     <h3>Payment Information</h3>
                     <label>
                         Card Number:
-                        <input type="text" v-model="payment.cardNumber" placeholder="#### #### #### ####" maxlength="16" minlength="16" required />
+                        <input type="text" v-model="payment.cardNumber" placeholder="#### #### #### ####" maxlength="16"
+                            minlength="16" required />
                     </label>
                     <label>
                         Expiry Date:
-                        <input type="text" v-model="payment.expiryDate" placeholder="MM/YY" maxlength="4" minlength="4" required/>
+                        <input type="text" v-model="payment.expiryDate" placeholder="MM/YY" maxlength="4" minlength="4"
+                            required />
                     </label>
                     <label>
                         CVV:
-                        <input type="text" v-model="payment.cvv" placeholder="###"  maxlength="3" minlength="3" required/>
+                        <input type="text" v-model="payment.cvv" placeholder="###" maxlength="3" minlength="3"
+                            required />
                     </label>
 
                     <!-- Below is the terms and conditions checkbox -->

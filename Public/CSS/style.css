@@ -309,8 +309,8 @@ main {
   cursor: pointer;
 }
 
-/* Product Styling */
-.product {
+/* Lesson Styling */
+.lesson {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -320,30 +320,30 @@ main {
   padding-bottom: 15px;
 }
 
-.product-image {
+.lesson-image {
   width: 150px;
   height: auto;
   border-radius: 8px;
 }
 
-.product-info {
+.lesson-info {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.product-info h3 {
+.lesson-info h3 {
   font-size: 1.5em;
   color: #555;
   margin-bottom: 10px;
 }
 
-.product-info p {
+.lesson-info p {
   color: #666;
   margin-bottom: 10px;
 }
 
-.product-info p strong {
+.lesson-info p strong {
   font-size: 1em;
   font-weight: bold;
   color: #555;
@@ -432,7 +432,7 @@ main {
   gap: 10px;
 }
 
-.productImageInCart {
+.lessonImageInCart {
   width: 60px;
   height: auto;
   border-radius: 8px;
