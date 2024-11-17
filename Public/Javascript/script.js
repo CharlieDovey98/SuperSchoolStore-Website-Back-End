@@ -26,6 +26,7 @@ let app = new Vue({
       cvv: "",
     },
   },
+  
   computed: {
     // A computed method to filter and sort the lessons on the shopping page by a keyword search of filter options.
     filterAndSortProducts() {
@@ -36,7 +37,8 @@ let app = new Vue({
         // If a Keyword is searched for.
         const query = this.searchQuery.toLowerCase();
         // Filter lowercased keyword query through lesson title, description, category and location for a match.
-        filteredProducts = filteredProducts.filter( (product) =>
+        filteredProducts = filteredProducts.filter(
+          (product) =>
             product.title.toLowerCase().includes(query) ||
             product.description.toLowerCase().includes(query) ||
             product.category.toLowerCase().includes(query) ||
@@ -45,7 +47,8 @@ let app = new Vue({
       }
 
       // If statement to sort products by selected attribute and order.
-      if (this.selectedSort) { // If a sort attribute is selected.
+      if (this.selectedSort) {
+        // If a sort attribute is selected.
         // Copy and sort the array based on the comparison of the selected attribute.
         filteredProducts = filteredProducts.slice().sort((a, b) => {
           let valueOne = a[this.selectedSort];
@@ -81,7 +84,7 @@ let app = new Vue({
         return `${this.cart.length} items`;
       }
     },
-    
+
     // A computed method to check whether a user can complete checkout.
     canCheckout() {
       return (
@@ -93,6 +96,7 @@ let app = new Vue({
       );
     },
   },
+
   methods: {
     // A try catch to populate products with MongoDB database products collection.
     async fetchProducts() {
@@ -115,13 +119,24 @@ let app = new Vue({
 
     // A method to add lessons from the shopping page to the users 'Cart'.
     addToCart(product) {
-      this.cart.push(product);
-      console.log(`${product.title} added to cart.`);
+      // If there is space available, add the product to the cart and reduce the spaces left.
+      if (product.spacesAvailable > 0) {
+        this.cart.push(product);
+        product.spacesAvailable -= 1;
+        console.log(`${product.title} added to cart. Spaces remaining: ${product.spacesAvailable}`);
+      } else {
+      }
     },
 
     // A method to remove lessons from the users 'Cart'.
-    removeFromCart(index) {
-      this.cart.splice(index, 1);
+    removeFromCart(productIndex) {
+      // Remove the lesson from the cart and update the spaces available.
+      const product = this.cart[productIndex];
+      product.spacesAvailable += 1;
+      this.cart.splice(productIndex, 1);
+      console.log(
+        `${product.title} removed from cart. Spaces remaining: ${product.spacesAvailable}`
+      );
     },
 
     // A method to scroll to the top of the page.
@@ -152,6 +167,25 @@ let app = new Vue({
     submitCheckout() {
       if (this.canCheckout) {
         alert("Purchase complete, Thank you for shopping with S3!");
+
+        // Clear all user inputs in the checkout page.
+        this.user = {
+          firstName: "",
+          lastName: "",
+          email: "",
+          confirmEmail: "",
+          password: "",
+          confirmPassword: "",
+          termsAccepted: false,
+        };
+        this.payment = {
+          cardNumber: "",
+          expiryDate: "",
+          cvv: "",
+        };
+
+        // Clear the cart of purchased items.
+        this.cart = [];
       } else {
         alert(
           "Please fill out all required fields correctly and accept the Terms and Conditions."
