@@ -6,7 +6,7 @@ const express = require("express");
 //const path = require("path");
 //const http = require("http");
 const morgan = require("morgan");
-const { db } = require("./mongoDB"); // Importing from mongoDB.js file.
+const { db, ObjectId } = require("./mongoDB"); // Importing from mongoDB.js file.
 
 // Calls the express function to start a new Express application
 const app = express();
@@ -56,11 +56,10 @@ app.param("sortAscendingDescending",(request, response, next, sortAscendingDesce
     // Guard statement to validate the input. Only ascending and descending are valid inputs.
     if (!["ascending", "descending"].includes(sortAscendingDescending)) {
       return response.status(400).json({ error: `Invalid sort direction: ${sortAscendingDescending}` });
-    } else {
+    }
       // The ternary operator assigns a sorting direction integer to the request element, based on the sortAscendingDescending value. If descending -1, or 1 for ascending.
       request.sortDirection = sortAscendingDescending === "descending" ? -1 : 1;
       next();
-    }
   }
 );
 
@@ -77,7 +76,7 @@ app.get("/collections/:collectionName", async (request, response, next) => {
 // Get route to attain the lessons sorted by parameters :selectedSortAspect and direction :sortAscendingDescending.
 app.get("/collections/:collectionName/:selectedSortAspect/:sortAscendingDescending",
   async (request, response, next) => {
-    try { // find the required collection, sort the results using the selected sorting aspect and the sorting direction.
+    try { // Try catch to find the required collection, sort the results using the selected sorting aspect and the sorting direction.
       const results = await request.collection.find({}).sort({ [request.sortAspect]: request.sortDirection }).toArray();
       response.json(results);
     } catch (error) {
@@ -85,6 +84,19 @@ app.get("/collections/:collectionName/:selectedSortAspect/:sortAscendingDescendi
     }
   }
 );
+
+// Get route to attain a single document in the lessons collection of the database.
+app.get('/collections/:collectionName/:id', async (request, response, next) => {
+  try {
+    const result = await request.collection.findOne({ _id: new ObjectId(request.params.id) });
+    if (!result) {
+      return response.status(404).json({ error: 'Document not found' });
+    }
+    response.json(result);
+  } catch (error) {
+    next(error); 
+  }
+});
 
 // Define the port for the server to listen on.
 const port = 3000;
