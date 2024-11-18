@@ -6,7 +6,7 @@ let app = new Vue({
     currentPage: "aboutUs", // currentPage sets the landing page to be presented on website interaction and allows tracking of the current page.
     lessons: [], // Procucts is inicialised empty and will attain the lessons from mongoDB database lessons collection.
     searchQuery: "", // A string for keyword searching.
-    selectedSort: "", // Selected key for sorting (location, price, length, availability, subject).
+    selectedSortAspect: "", // Selected key for sorting (location, price, courseLength, spacesAvailable, subject).
     sortOrder: "", // Ascending, descending or no sorting order.
     cart: [], // Cart is inicialised to empty and will update when the user adds lessons to their cart or removes them.
     sales: { customerPurchases: 101 },
@@ -27,52 +27,7 @@ let app = new Vue({
     },
   },
 
-  computed: {
-    // A computed method to filter and sort the lessons on the shopping page by a keyword search of filter options.
-    filterAndSortLessons() {
-      let filteredLessons = this.lessons; // Initialise an array with the lessons from the database.
-
-      // Filter lessons by keyword search.
-      if (this.searchQuery) {
-        // If a Keyword is searched for.
-        const query = this.searchQuery.toLowerCase();
-        // Filter lowercased keyword query through lesson title, description, subject and location for a match.
-        filteredLessons = filteredLessons.filter(
-          (lesson) =>
-            lesson.title.toLowerCase().includes(query) ||
-            lesson.description.toLowerCase().includes(query) ||
-            lesson.subject.toLowerCase().includes(query) ||
-            lesson.location.toLowerCase().includes(query)
-        );
-      }
-
-      // If statement to sort lessons by selected attribute and order.
-      if (this.selectedSort) {
-        // If a sort attribute is selected.
-        // Copy and sort the array based on the comparison of the selected attribute.
-        filteredLessons = filteredLessons.slice().sort((a, b) => {
-          let valueOne = a[this.selectedSort];
-          let valueTwo = b[this.selectedSort];
-
-          // If the type of the first value is a string, make both values lowercased for equal comparison.
-          if (typeof valueOne === "string") {
-            valueOne = valueOne.toLowerCase();
-            valueTwo = valueTwo.toLowerCase();
-          }
-
-          // Compare and return the values based on the selected sort order.
-          if (this.sortOrder === "ascending") {
-            return valueOne > valueTwo ? 1 : valueOne < valueTwo ? -1 : 0; // Ternary operator to move values based on the condition of ascending or descending.
-          } else if (this.sortOrder === "descending") {
-            return valueOne < valueTwo ? 1 : valueOne > valueTwo ? -1 : 0;
-          } else {
-            return 0; // If no sort order is selected, return the lessons as they are.
-          }
-        });
-      }
-
-      return filteredLessons; // Return the filtered lessons list.
-    },
+  computed: { // Below are computed properties that automatically update when their dependent data changes.
 
     // A computed method to update the display at the top right of the website, showing the amount of items in the cart.
     itemsInTheCart: function () {
@@ -97,7 +52,8 @@ let app = new Vue({
     },
   },
 
-  methods: {
+  methods: { // Below are reusable methods for API calls and event handling.
+
     // A try catch to populate lessons with MongoDB database lessons collection.
     async fetchLessons() {
       try {
@@ -110,28 +66,29 @@ let app = new Vue({
       }
     },
 
-    // Fetch filtered and sorted lessons
+    // Async method to fetch and retrieve the filtered and sorted lessons.
     async fetchFilteredAndSortedLessons() {
       try {
-        const sortAspect = this.selectedSort || "subject"; // Default sort by 'subject'
-        const sortOrder = this.sortOrder || "ascending"; // Default order is ascending
+        const sortAspect = this.selectedSortAspect;
+        const sortOrder = this.sortOrder;
 
         const response = await fetch(
           `/collections/lessons/${sortAspect}/${sortOrder}`
         );
         const data = await response.json();
-        this.lessons = data; // Update local array with the filtered/sorted lessons
+        this.lessons = data;
         console.log("Fetched filtered and sorted lessons:", this.lessons);
       } catch (error) {
         console.error("Error fetching filtered and sorted lessons:", error);
       }
     },
 
-    // A method to clear the keyword searching, filters and sorting options.
+    // Clear the keyword searching, filters and sorting options.
     resetFilters() {
-      this.selectedSort = "";
+      this.selectedSortAspect = "";
       this.sortOrder = "";
       this.searchQuery = "";
+      this.fetchLessons();
     },
 
     // A method to add lessons from the shopping page to the users 'Cart'.
@@ -212,7 +169,22 @@ let app = new Vue({
       }
     },
   },
-  created() {
+  watch: { // Watch methods react to changes in specific data properties and triggers logic or updates.
+
+    // Watch for changes in selectedSortAspect or sortOrder to fetch updated lessons.
+    selectedSortAspect() {
+      if (this.selectedSortAspect) {
+        this.fetchFilteredAndSortedLessons();
+      }
+    },
+    sortOrder() {
+      if (this.sortOrder) {
+        this.fetchFilteredAndSortedLessons();
+      }
+    },
+  },
+
+  created() { // Created method which is triggered after the instance is created and initialises data collection from the database.
     this.fetchLessons(); // Call fetchLessons() method when the Vue instance is created.
   },
 });

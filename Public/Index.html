@@ -124,27 +124,27 @@
                             <label class="filter-by-label">
                                 <!-- Type="radio" allows for checkboxes to be linked by name="", with only one selected at a time. -->
                                 <input class="lessons-sort-checkbox" type="radio" name="sort-option" value="subject"
-                                    v-model="selectedSort" />
+                                    v-model="selectedSortAspect" />
                                 Subject
                             </label>
                             <label class="filter-by-label">
                                 <input class="lessons-sort-checkbox" type="radio" name="sort-option" value="location"
-                                    v-model="selectedSort" />
+                                    v-model="selectedSortAspect" />
                                 Location
                             </label>
                             <label class="filter-by-label">
                                 <input class="lessons-sort-checkbox" type="radio" name="sort-option" value="price"
-                                    v-model="selectedSort" />
+                                    v-model="selectedSortAspect" />
                                 Price
                             </label>
                             <label class="filter-by-label">
                                 <input class="lessons-sort-checkbox" type="radio" name="sort-option"
-                                    value="courseLength" v-model="selectedSort" />
+                                    value="courseLength" v-model="selectedSortAspect" />
                                 Length
                             </label>
                             <label class="filter-by-label">
                                 <input class="lessons-sort-checkbox" type="radio" name="sort-option"
-                                    value="spacesAvailable" v-model="selectedSort" />
+                                    value="spacesAvailable" v-model="selectedSortAspect" />
                                 Availability
                             </label>
                         </div>
@@ -161,7 +161,7 @@
                             </label>
                             <label class="filter-by-label">
                                 <input class="lessons-sort-checkbox" type="radio" name="display-option"
-                                    v-on:change="resetFilters()" />
+                                    v-on:change="resetFilters" />
                                 No filters
                             </label>
                         </div>
@@ -171,7 +171,7 @@
                 </div>
                 <p class="filter-information-prompt">Please refine your search through the filters and keyword searching
                     above.</p>
-                <div class="lesson" v-for="lesson in filterAndSortLessons" :key="lesson.id">
+                <div class="lesson" v-for="lesson in lessons" :key="lesson.id">
                     <figure>
                         <img v-bind:src="lesson.image" class="lesson-image" :alt="lesson.title">
                     </figure>

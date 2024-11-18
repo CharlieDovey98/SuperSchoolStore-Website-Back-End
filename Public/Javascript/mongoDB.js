@@ -19,4 +19,4 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
 let db = client.db(dbName);
 
-module.exports = db; // Export the db instance for use in server.js
+module.exports = { db }; // Export the db instance for use in server.js
