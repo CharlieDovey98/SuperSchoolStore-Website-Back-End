@@ -367,11 +367,17 @@ main {
   font-size: 1em;
   text-align: center;
   white-space: nowrap;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.5s ease;
 }
-
-.addButton:hover {
+.addButton:hover { /* When hovering over the button. */
   background-color: #2990b6;
+}
+.addButton:disabled { /* CSS changes when the button is disabled. */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.addButton:disabled:hover { /* CSS changes for the disabled button when the cursor is hovering over the button. */
+  background-color: #b62948;
 }
 /* ----- */
 

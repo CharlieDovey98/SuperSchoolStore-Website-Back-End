@@ -49,7 +49,7 @@
                     </p>
                     <p>
                         At S3, we’re committed to supporting your learning journey every step of the way.<br>
-                        To date, <strong>{{sales.customerPurchases}} Students</strong> have chosen to learn with S3!<br>
+                        To date, <strong>{{customerPurchases}} Students</strong> have chosen to learn with S3!<br>
                         Our courses include:
                     </p>
                     <ul>
@@ -194,7 +194,7 @@
                     </div>
                     <div class="lesson-add-button-div">
                         <button id="addLessonToCartButton" class="addButton" v-on:click="addToCart(lesson)"
-                            v-if="lesson.spacesAvailable > 0">Add to Cart</button>
+                            :disabled="lesson.spacesAvailable <= 0">Add to Cart</button>
                     </div>
                 </div>
 

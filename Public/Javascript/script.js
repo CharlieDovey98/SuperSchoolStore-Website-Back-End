@@ -9,9 +9,9 @@ let app = new Vue({
     selectedSortAspect: "", // Selected key for sorting (location, price, courseLength, spacesAvailable, subject).
     sortOrder: "", // Ascending, descending or no sorting order.
     cart: [], // Cart is inicialised to empty and will update when the user adds lessons to their cart or removes them.
-    sales: { customerPurchases: 101 },
+    customerPurchases: 0, // 
     user: {
-      //
+      // User information gathered through the checkout page.
       firstName: "",
       lastName: "",
       email: "",
@@ -20,6 +20,7 @@ let app = new Vue({
       confirmPassword: "",
       termsAccepted: false,
     },
+    // Payment information gathered through the checkout page.
     payment: {
       cardNumber: "",
       expiryDate: "",
@@ -54,7 +55,19 @@ let app = new Vue({
 
   methods: { // Below are reusable methods for API calls and event handling.
 
-    // A try catch to populate lessons with MongoDB database lessons collection.
+    // Async method to fetch the total number of customer purchases from the database, purchases collection.
+    async fetchCustomerPurchasesAmount() {
+      try {
+        const response = await fetch("/collections/purchases");
+        const data = await response.json();
+        this.customerPurchases = data.length;
+        console.log("Fetched purchases amount:", this.customerPurchases);
+      } catch (error) {
+        console.error("Error fetching customer purchases from the Database:", error);
+      }
+    },
+
+    // Async method to fetch the data from the database, lessons collection.
     async fetchLessons() {
       try {
         const response = await fetch("/collections/lessons");
@@ -62,22 +75,19 @@ let app = new Vue({
         this.lessons = data;
         console.log("Fetched lessons:", this.lessons);
       } catch (error) {
-        console.error("Error fetching lessons from Database:", this.lessons);
+        console.error("Error fetching lessons from the Database:", error);
       }
     },
 
-    // Async method to fetch and retrieve the filtered and sorted lessons.
+    // Async method to fetch the filtered and sorted lessons.
     async fetchFilteredAndSortedLessons() {
       try {
         const sortAspect = this.selectedSortAspect;
         const sortOrder = this.sortOrder;
-
-        const response = await fetch(
-          `/collections/lessons/${sortAspect}/${sortOrder}`
-        );
+        const response = await fetch(`/collections/lessons/${sortAspect}/${sortOrder}`);
         const data = await response.json();
         this.lessons = data;
-        console.log("Fetched filtered and sorted lessons:", this.lessons);
+        console.log("Fetched custom filtered and sorted lessons:", this.lessons);
       } catch (error) {
         console.error("Error fetching filtered and sorted lessons:", error);
       }
@@ -186,5 +196,7 @@ let app = new Vue({
 
   created() { // Created method which is triggered after the instance is created and initialises data collection from the database.
     this.fetchLessons(); // Call fetchLessons() method when the Vue instance is created.
+    this.fetchCustomerPurchasesAmount();
+    setInterval(this.fetchCustomerPurchasesAmount, 60000);
   },
 });
