@@ -43,6 +43,14 @@ let app = new Vue({
       }
     },
 
+    totalCartPrice() {
+      let cartTotal = 0;
+      for (let lesson of this.cart) {
+        cartTotal += lesson.price;
+      }
+      return cartTotal.toFixed(2); // The total is rounded to 2 decimal places using toFixed(2).
+    },
+
     // A computed method to check whether a user can complete checkout.
     canCheckout() {
       return (

@@ -182,7 +182,7 @@
                         <!-- {{}} double braces is text interpolation, allowing data to be manupulated within. -->
                         <p><strong>Subject:</strong> {{ lesson.subject }}</p>
                         <p><strong>Location:</strong> {{ lesson.location }}</p>
-                        <p><strong>Price:</strong> £{{ lesson.price }}</p>
+                        <p><strong>Price:</strong> £{{ lesson.price.toFixed(2) }}</p>
                         <p><strong>Spaces Available:</strong>
                             <span v-if="lesson.spacesAvailable === 0">No spaces left</span>
                             <span v-else-if="lesson.spacesAvailable <= 1">Hurry, only {{ lesson.spacesAvailable }} space
@@ -205,19 +205,23 @@
                 <h2>Checkout</h2>
                 <div v-if="cart.length">
                     <ul>
-                        <li v-for="(lesson, lessons) in cart" :key="lesson.id">
+                        <li v-for="(lesson, lessonIndex) in cart" :key="lesson.id">
                             <div class="lessons-in-cart">
                                 <figure>
                                     <img v-bind:src="lesson.image" class="lessonImageInCart" :alt="lesson.title">
                                 </figure>
-                                {{ lesson.title }} at {{lesson.location}} £{{ lesson.price }}
+                                {{ lesson.title }} at {{lesson.location}} £{{ lesson.price.toFixed(2) }}
                             </div>
-                            <button v-on:click="removeFromCart(lessons)">Remove</button>
+                            <button v-on:click="removeFromCart(lessonIndex)">Remove</button>
                         </li>
                     </ul>
                 </div>
+                <div class="cartTotal">
+                    
+                    <p><strong>Cart Total:</strong> £{{ totalCartPrice }}</p>
+                </div>
                 <div v-else>
-                    <p>Your cart is empty.</p>
+                    <p>Your cart is empty. Please add lessons to your cart to continue with your purchase.</p>
                 </div>
 
                 <!-- Below is the user information, form input-->

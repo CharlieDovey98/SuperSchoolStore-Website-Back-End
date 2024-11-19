@@ -297,7 +297,7 @@ main {
 
 .keyword-search {
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #bebebe;
   border-radius: 5px;
   font-size: 1em;
   width: 100%;
@@ -316,7 +316,7 @@ main {
   justify-content: space-between;
   gap: 50px;
   margin-bottom: 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #bebebe;
   padding-bottom: 15px;
 }
 
@@ -414,7 +414,7 @@ main {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #bebebe;
 }
 
 #checkoutPage ul li button {
@@ -444,6 +444,16 @@ main {
   border-radius: 8px;
 }
 
+.cartTotal{
+  text-align: center;
+  border-bottom: 1px solid #26586a;
+  padding-bottom: 10px;
+}
+.cartTotal p {
+  color: #26586a;
+  font-size: 1.5em;
+}
+
 /* User information & payment form */
 form {
   display: flex;
@@ -464,7 +474,7 @@ form input[type="email"],
 form input[type="tel"],
 form input[type="password"] {
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #bebebe;
   border-radius: 5px;
   font-size: 1em;
   width: 100%;
