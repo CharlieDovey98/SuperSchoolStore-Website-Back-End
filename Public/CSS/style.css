@@ -461,6 +461,7 @@ form label {
 
 form input[type="text"],
 form input[type="email"],
+form input[type="tel"],
 form input[type="password"] {
   padding: 10px;
   border: 1px solid #ddd;
@@ -488,14 +489,18 @@ form button {
   color: white;
   cursor: pointer;
   font-size: 1.1em;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.5s ease;
   width: 100%;
   margin-top: 15px;
 }
 
 form button:disabled {
-  background-color: #aaa;
   cursor: not-allowed;
+  opacity: 0.6;
+}
+
+form button:disabled:hover {
+  background-color: #b62948;
 }
 
 form button:hover:enabled {

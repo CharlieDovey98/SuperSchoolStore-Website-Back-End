@@ -29,8 +29,9 @@
                 </div>
                 <div class="checkoutDiv" v-on:click="showCheckoutPage">
                     <img src="Images/shoppingCart.png" alt="Checkout" class="shoppingCartPNG">
-                    <p>Checkout </p><span class="cartItems">{{itemsInTheCart}}</span>
-                </div>
+                    <span class="cartItems" v-if="currentPage !== 'checkout'">Checkout {{ itemsInTheCart }} </span>
+                    <span class="cartItems" v-else>Back To Shopping </span>
+                  </div>
         </div>
         </header>
         <main>
@@ -81,7 +82,7 @@
                         Whether you’re starting fresh or advancing your career, S3 provides a supportive and
                         results-driven environment
                         where you can achieve your learning goals and set yourself up for future success.
-                        <br><br><a v-on:click="showShoppingPage" id="shopAllLessons">Click Here to Shop all
+                        <br><br><a v-on:click="showShoppingPage(); scrollToTop()" id="shopAllLessons">Click Here to Shop all
                             lessons.</a>
                     </p>
                 </div>
@@ -220,57 +221,58 @@
                 </div>
 
                 <!-- Below is the user information, form input-->
-                <form @submit.prevent="submitCheckout">
+                <form v-on:submit.prevent="submitCheckout">
                     <h3>Purchase Information</h3>
                     <label>
                         First Name:
-                        <input type="text" v-model="user.firstName" required />
+                        <input type="text" v-model="user.firstName" required/>
                     </label>
                     <label>
                         Surname:
-                        <input type="text" v-model="user.lastName" required />
+                        <input type="text" v-model="user.lastName" required/>
                     </label>
                     <label>
                         Email:
-                        <input type="email" v-model="user.email" required />
+                        <input type="email" v-model="user.email" required/>
                     </label>
                     <label>
                         Confirm Email:
-                        <input type="email" v-model="user.confirmEmail" required />
+                        <input type="email" v-model="user.confirmEmail" required/>
+                    </label>
+                    <label>
+                        Phone Number:
+                        <input type="tel" v-model="user.phoneNumber" required/>
                     </label>
                     <label>
                         Password:
-                        <input type="password" v-model="user.password" required />
+                        <input type="password" v-model="user.password" required/>
                     </label>
                     <label>
                         Confirm Password:
-                        <input type="password" v-model="user.confirmPassword" required m />
+                        <input type="password" v-model="user.confirmPassword" required/>
                     </label>
 
                     <h3>Payment Information</h3>
                     <label>
                         Card Number:
-                        <input type="text" v-model="payment.cardNumber" placeholder="#### #### #### ####" maxlength="16"
-                            minlength="16" required />
+                        <input type="tel" v-model="payment.cardNumber" placeholder="#### #### #### ####" required/>
                     </label>
                     <label>
                         Expiry Date:
-                        <input type="text" v-model="payment.expiryDate" placeholder="MM/YY" maxlength="4" minlength="4"
-                            required />
+                        <input type="tel" v-model="payment.expiryDate" placeholder="MMYY" required/>
                     </label>
                     <label>
                         CVV:
-                        <input type="text" v-model="payment.cvv" placeholder="###" maxlength="3" minlength="3"
-                            required />
+                        <input type="tel" v-model="payment.cvv" placeholder="###" required/>
                     </label>
 
                     <!-- Below is the terms and conditions checkbox -->
                     <label>
-                        <input type="checkbox" v-model="user.termsAccepted" />
+                        <input type="checkbox" v-model="user.termsAccepted"  required/>
                         I have read and agree to the Terms and Conditions
                     </label>
 
-                    <button type="submit" v-on:click="canCheckout">Checkout</button>
+                    <button type="submit" :disabled="!canCheckout">Checkout</button>
                 </form>
             </section>
 
@@ -279,7 +281,7 @@
         <div class="footerSection">
             <div class="footerDiv">
                 <div>
-                    <a href="#" v-on:click.prevent="scrollToTop" id="scrollToTop">Scroll To The Top</a>
+                    <a v-on:click="scrollToTop" id="scrollToTop">Scroll To The Top</a>
 
                 </div>
                 <p>SuperSchoolStore S3 &copy; 2024&nbsp;&nbsp;&nbsp;&nbsp;Created by Charlie Dovey M00843428.</p>

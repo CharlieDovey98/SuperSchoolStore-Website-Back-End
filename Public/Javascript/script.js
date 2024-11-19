@@ -9,13 +9,14 @@ let app = new Vue({
     selectedSortAspect: "", // Selected key for sorting (location, price, courseLength, spacesAvailable, subject).
     sortOrder: "", // Ascending, descending or no sorting order.
     cart: [], // Cart is inicialised to empty and will update when the user adds lessons to their cart or removes them.
-    customerPurchases: 0, // 
+    customerPurchases: 0, //
     user: {
       // User information gathered through the checkout page.
       firstName: "",
       lastName: "",
       email: "",
       confirmEmail: "",
+      phoneNumber: "",
       password: "",
       confirmPassword: "",
       termsAccepted: false,
@@ -28,7 +29,8 @@ let app = new Vue({
     },
   },
 
-  computed: { // Below are computed properties that automatically update when their dependent data changes.
+  computed: {
+    // Below are computed properties that automatically update when their dependent data changes.
 
     // A computed method to update the display at the top right of the website, showing the amount of items in the cart.
     itemsInTheCart: function () {
@@ -46,9 +48,13 @@ let app = new Vue({
       return (
         this.user.firstName &&
         this.user.lastName &&
+        this.user.phoneNumber &&
         this.user.email === this.user.confirmEmail &&
         this.user.password === this.user.confirmPassword &&
-        this.user.termsAccepted
+        this.user.termsAccepted &&
+        this.payment.cardNumber &&
+        this.payment.expiryDate &&
+        this.payment.cvv
       );
     },
   },
@@ -145,7 +151,11 @@ let app = new Vue({
       if (this.cart.length == 0) {
         alert("Please add lessons to the cart before proceeding to checkout");
       } else if (this.cart.length > 0) {
-        this.currentPage = "checkout";
+        if (this.currentPage === "checkout") {
+          this.currentPage = "shopping";
+        } else {
+          this.currentPage = "checkout";
+        }
       }
     },
 
@@ -160,6 +170,7 @@ let app = new Vue({
           lastName: "",
           email: "",
           confirmEmail: "",
+          phoneNumber: "",
           password: "",
           confirmPassword: "",
           termsAccepted: false,
@@ -197,6 +208,6 @@ let app = new Vue({
   created() { // Created method which is triggered after the instance is created and initialises data collection from the database.
     this.fetchLessons(); // Call fetchLessons() method when the Vue instance is created.
     this.fetchCustomerPurchasesAmount();
-    setInterval(this.fetchCustomerPurchasesAmount, 60000);
+    setInterval(this.fetchCustomerPurchasesAmount, 60000); // Set an interval time limit of 1 minute before calling the method.
   },
 });
