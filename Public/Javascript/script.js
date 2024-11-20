@@ -90,7 +90,7 @@ let app = new Vue({
     // Async method to fetch the total number of customer purchases from the database, purchases collection.
     async fetchCustomerPurchasesAmount() {
       try {
-        const response = await fetch("/collections/purchases");
+        const response = await fetch("http://superschoolstore.eu-west-2.elasticbeanstalk.com/collections/purchases");
         const data = await response.json();
         this.customerPurchases = data.length;
         console.log("Fetched purchases amount:", this.customerPurchases);
@@ -102,7 +102,7 @@ let app = new Vue({
     // Async method to fetch the data from the database, lessons collection.
     async fetchLessons() {
       try {
-        const response = await fetch("/collections/lessons");
+        const response = await fetch("http://superschoolstore.eu-west-2.elasticbeanstalk.com/collections/lessons");
         const data = await response.json();
         this.lessons = data;
         console.log("Fetched lessons:", this.lessons);
@@ -116,7 +116,7 @@ let app = new Vue({
       try {
         const sortAspect = this.selectedSortAspect;
         const sortOrder = this.sortOrder;
-        const response = await fetch(`/collections/lessons/${sortAspect}/${sortOrder}`);
+        const response = await fetch(`http://superschoolstore.eu-west-2.elasticbeanstalk.com/collections/lessons/${sortAspect}/${sortOrder}`);
         const data = await response.json();
         this.lessons = data;
         console.log("Fetched custom filtered and sorted lessons:", this.lessons);

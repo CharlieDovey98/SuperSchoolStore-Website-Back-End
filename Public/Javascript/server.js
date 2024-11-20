@@ -4,7 +4,7 @@
 
 const express = require("express");
 //const path = require("path");
-//const http = require("http");
+const http = require("http");
 const morgan = require("morgan");
 const { db, ObjectId } = require("./mongoDB"); // Importing from mongoDB.js file.
 
@@ -99,10 +99,16 @@ app.get('/collections/:collectionName/:id', async (request, response, next) => {
 });
 
 // Define the port for the server to listen on.
-const port = 3000;
+// const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
+
 
 // Start the server on port 3000.
-app.use(express.static("public"));
-app.listen(port, () => {
-  console.log(`Webserver started at http://localhost:${port}`);
+// app.use(express.static("public"));
+// app.listen(port, () => {
+//   console.log(`Webserver started at http://localhost:${port}`);
+// });
+
+app.listen(port, function() {
+  console.log("App started on port: " + port);
 });
