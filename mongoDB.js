@@ -2,7 +2,7 @@
 
 let propertiesReader = require("properties-reader");
 const path = require("path");
-let propertiesPath = path.resolve(__dirname, "/conf/db.properties");
+let propertiesPath = path.resolve(__dirname, "conf/db.properties");
 let properties = propertiesReader(propertiesPath);
 let dbPprefix = properties.get("db.prefix");
 
@@ -18,5 +18,14 @@ const uri = dbPprefix + dbUsername + ":" + dbPwd + dbUrl + dbParams;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
 let db = client.db(dbName);
+
+console.log("path to properties file:", propertiesPath);
+client.connect((error) => {
+  if (error) {
+    console.error("Failed to connect to MongoDB:", error);
+  } else {
+    console.log("Connected to MongoDB successfully.");
+  }
+});
 
 module.exports = { db, ObjectId }; // Export the db instance for use in server.js
