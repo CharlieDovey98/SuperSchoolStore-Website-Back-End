@@ -3,7 +3,7 @@
 // Use: ctrl ^c to stop the server.
 
 const express = require("express");
-//const path = require("path");
+const path = require("path");
 const http = require("http");
 const cors = require('cors');
 const morgan = require("morgan");
@@ -17,7 +17,16 @@ app.use(morgan("dev"));
 
 // Middleware to parse JSON requests
 app.use(express.json());
-app.use(cors());
+
+//
+const corsOptions = {
+  origin: ['https://charliedovey98.github.io'], // Allow frontend origin.
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],    // Allow HTTP methods.
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers.
+};
+//
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Added to handle preflight requests.
 
 // Middleware to log additional request details
 app.use((request, response, next) => {
@@ -100,17 +109,16 @@ app.get('/collections/:collectionName/:id', async (request, response, next) => {
   }
 });
 
-// Define the port for the server to listen on.
 // const port = process.env.PORT || 3000;
-const port = process.env.PORT || 3000;
-
-
 // Start the server on port 3000.
 // app.use(express.static("public"));
 // app.listen(port, () => {
 //   console.log(`Webserver started at http://localhost:${port}`);
 // });
 
+
+// Define the port for the server to listen on.
+const port = process.env.PORT || 3000;
 app.listen(port, function() {
-  console.log("App started on port: " + port);
+  console.log(`App started on port: ${port}`);
 });
