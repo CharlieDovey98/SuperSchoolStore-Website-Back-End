@@ -172,7 +172,7 @@
                 </div>
                 <p class="filter-information-prompt">Please refine your search through the filters and keyword searching
                     above.</p>
-                <div class="lesson" v-for="lesson in lessons" :key="lesson.id">
+                <div class="lesson" v-for="lesson in updatedLessons" :key="lesson.id">
                     <figure>
                         <img v-bind:src="lesson.image" class="lesson-image" :alt="lesson.title">
                     </figure>

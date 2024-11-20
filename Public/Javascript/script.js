@@ -29,8 +29,7 @@ let app = new Vue({
     },
   },
 
-  computed: {
-    // Below are computed properties that automatically update when their dependent data changes.
+  computed: { // Below are computed properties that automatically update when their dependent data changes.
 
     // A computed method to update the display at the top right of the website, showing the amount of items in the cart.
     itemsInTheCart: function () {
@@ -43,6 +42,25 @@ let app = new Vue({
       }
     },
 
+    // A computed method to adjust all lessons dynamically based on the cart contents.
+    updatedLessons() {
+      const updatedLessonsArray = [];
+      for (let lesson of this.lessons) {// A for loop to loop through each lesson and check if its in the cart.
+
+        let lessonInCartCount = 0;
+        for (let cartItem of this.cart) { // A for loop through all cart items, if a match between the id's is found, update the cartCount
+          if (cartItem.id === lesson.id) {
+            lessonInCartCount++;
+          }
+        }
+        // Copy the lesson using spread syntax (...lesson) and adjust spacesAvailable by matches found.
+        const adjustedLesson = { ...lesson, spacesAvailable: lesson.spacesAvailable - lessonInCartCount };
+        updatedLessonsArray.push(adjustedLesson); // Push back the adjustedLesson and overwrite the original lesson object.
+      }
+      return updatedLessonsArray;
+    },
+
+    // A computed method to total the costs of lessons in the cart to be displayed on the checkout page.
     totalCartPrice() {
       let cartTotal = 0;
       for (let lesson of this.cart) {
