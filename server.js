@@ -2,37 +2,41 @@
 // Use: 'npm start' to start the script which runs the server.
 // Use: ctrl ^c to stop the server.
 
+// Importing the needed packages.
 const express = require("express");
 const path = require("path");
 const http = require("http");
 const cors = require('cors');
 const morgan = require("morgan");
-const { db, ObjectId } = require("./mongoDB"); // Importing from mongoDB.js file.
+// Importing from mongoDB.js file.
+const { db, ObjectId } = require("./mongoDB"); 
 
-// Calls the express function to start a new Express application
+// Call the express function to start a new Express application.
 const app = express();
 
-// Middleware to log requests
+// Middleware to log HTTP requests.
 app.use(morgan("dev"));
 
-// Middleware to parse JSON requests
+// Middleware to parse JSON requests.
 app.use(express.json());
 
-//
+// Allow CORS for GitHub Pages.
 const corsOptions = {
   origin: ['https://charliedovey98.github.io'], // Allow frontend origin.
   methods: ['GET', 'POST', 'PUT', 'DELETE'],    // Allow HTTP methods.
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers.
 };
-//
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Added to handle preflight requests.
 
-// Middleware to log additional request details
+// Middleware to log additional request details.
 app.use((request, response, next) => {
   console.log("Request coming in: " + request.method + " to " + request.url + "\nRequest IP: " + request.ip + "\nRequest date: " + new Date());
   next();
 });
+
+// Serve static files (CSS, JS, Images) from the "BackEnd" folder
+app.use(express.static(path.join(__dirname, "BackEnd")));
 
 // Error handling middleware.
 app.use((error, request, response, next) => {
@@ -108,14 +112,6 @@ app.get('/collections/:collectionName/:id', async (request, response, next) => {
     next(error); 
   }
 });
-
-// const port = process.env.PORT || 3000;
-// Start the server on port 3000.
-// app.use(express.static("public"));
-// app.listen(port, () => {
-//   console.log(`Webserver started at http://localhost:${port}`);
-// });
-
 
 // Define the port for the server to listen on.
 const port = process.env.PORT || 3000;
