@@ -2,7 +2,7 @@
 
 let propertiesReader = require("properties-reader");
 const path = require("path");
-let propertiesPath = path.resolve(__dirname, "../../conf/db.properties");
+let propertiesPath = path.resolve(__dirname, "/conf/db.properties");
 let properties = propertiesReader(propertiesPath);
 let dbPprefix = properties.get("db.prefix");
 
