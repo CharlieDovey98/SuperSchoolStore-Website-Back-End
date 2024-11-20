@@ -5,6 +5,7 @@
 const express = require("express");
 //const path = require("path");
 const http = require("http");
+const cors = require('cors');
 const morgan = require("morgan");
 const { db, ObjectId } = require("./mongoDB"); // Importing from mongoDB.js file.
 
@@ -16,6 +17,7 @@ app.use(morgan("dev"));
 
 // Middleware to parse JSON requests
 app.use(express.json());
+app.use(cors());
 
 // Middleware to log additional request details
 app.use((request, response, next) => {

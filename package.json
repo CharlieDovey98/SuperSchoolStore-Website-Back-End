@@ -2,8 +2,7 @@
   "name": "static-file-fun",
   "private": true,
   "scripts": {
-    "start": "node Public/Javascript/server.js",
-    "create": "node server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
