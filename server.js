@@ -35,8 +35,8 @@ app.use((request, response, next) => {
   next();
 });
 
-// Serve static files (CSS, JS, Images) from the "BackEnd" folder
-app.use(express.static(path.join(__dirname, "BackEnd")));
+// Serve static files (CSS, JS, Images) from the "BackEnd" folder.
+app.use('/static', express.static(path.join(__dirname, 'BackEnd')));
 
 // Error handling middleware.
 app.use((error, request, response, next) => {
