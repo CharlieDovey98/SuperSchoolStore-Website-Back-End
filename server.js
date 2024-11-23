@@ -5,7 +5,7 @@
 // Importing the needed packages.
 const express = require("express");
 const path = require("path");
-const http = require("http");
+//const http = require("http");
 const cors = require('cors');
 const morgan = require("morgan");
 // Importing from mongoDB.js file.
