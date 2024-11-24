@@ -113,6 +113,21 @@ app.get('/collections/:collectionName/:id', async (request, response, next) => {
   }
 });
 
+// POST route to add a new purchase to the purchases collection.
+app.post("/collections/purchases", async (request, response, next) => {
+  try {
+    const purchase = request.body; // Get purchase details from the request body.
+    if (!purchase) {
+      return response.status(400).json({ error: "Purchase data is missing" });
+    }
+    // Insert the purchase into the purchases collection.
+    const result = await db.collection("purchases").insertOne(purchase);
+    response.json({ message: "Purchase added successfully", result });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Define the port for the server to listen on.
 const port = process.env.PORT || 3000;
 app.listen(port, function() {
