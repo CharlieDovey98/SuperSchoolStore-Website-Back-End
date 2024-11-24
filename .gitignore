@@ -1,4 +1,4 @@
-#Git ignore file to ignore pushing specified files.
+#Git ignore file to ignore pushing specified files and file types.
 
 notes.txt
 node_modules/
