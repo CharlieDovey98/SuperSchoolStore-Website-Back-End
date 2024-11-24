@@ -100,13 +100,33 @@ app.get("/collections/:collectionName/:selectedSortAspect/:sortAscendingDescendi
   }
 );
 
-// Get route to attain a single document in the lessons collection of the database.
-app.get('/collections/:collectionName/:id', async (request, response, next) => {
-  try {
-    const result = await request.collection.findOne({ _id: new ObjectId(request.params.id) });
-    if (!result) {
-      return response.status(404).json({ error: 'Document not found' });
+// Route parameter to validate and preprocess the parameter element :lessonId.
+app.param("lessonId", (request, response, next, lessonId) => {
+  (async () => {
+    try {
+      const numericId = parseInt(lessonId, 10); // Parse the lessonId as a base-10 number.
+      if (isNaN(numericId)) { // Check if the numericId is Not-A-Number.
+        return response.status(400).json({ error: "Invalid lesson ID" });
+      }
+
+      // Check if the ID exists in the database.
+      const exists = await db.collection("lessons").findOne({ id: numericId });
+      if (!exists) {
+        return response.status(404).json({ error: "Lesson ID not found in database" });
+      }
+
+      request.lessonId = numericId; // Store the validated ID in request object.
+      next();
+    } catch (error) {
+      next(error); // Pass any errors to Express error handling middleware.
     }
+  })();
+});
+
+// Get route to attain a single document in the lessons collection of the database.
+app.get('/collections/:collectionName/:lessonId', async (request, response, next) => {
+  try {
+    const result = await request.collection.findOne({ id: request.lessonId }); // Query by `id`, not '_id'.
     response.json(result);
   } catch (error) {
     next(error); 
@@ -127,6 +147,93 @@ app.post("/collections/purchases", async (request, response, next) => {
     next(error);
   }
 });
+
+
+
+// Route parameter to validate and preprocess the parameter element :lessonField.
+app.param("lessonField", (request, response, next, lessonField) => {
+  const validFields = ["id","title","subject","location","description","courseLength","price","spacesAvailable","rating","image",];
+  // Guard statement to validate the input. Only the above strings are valid inputs.
+  if (!validFields.includes(lessonField)) {
+    return response.status(400).json({ error: `Invalid lesson field entered: ${lessonField}` });
+  }
+  request.lessonField = lessonField; // Store the validated lessonField in request object.
+  next();
+});
+
+// Route parameter to validate and preprocess the parameter element :operation.
+app.param("operation", (request, response, next, operation) => {
+  const validOperations = ["increment", "decrement", "set"];
+  
+  // Guard statement to validate the input.
+  if (!validOperations.includes(operation)) {
+    return response.status(400).json({ error: `Invalid operation entered: ${operation}` });
+  }
+
+  request.operation = operation; // Store the validated operation in the request object.
+  next();
+});
+
+// Put route to update any Lesson attribute.
+app.put("/collections/lessons/:lessonId/:lessonField/:operation", async (request, response, next) => {
+  try {
+    const { lessonId, lessonField, operation } = request; // Extract parameters.
+    const { value } = request.body; // Extract the value from the request body.
+
+    // Initialize the update query, which willbe updated based on the operation.
+    let updateQuery;
+    const lesson = await db.collection("lessons").findOne({ id: lessonId });
+    // Validate value based on numerical field types.
+    if (
+      ["spacesAvailable", "price", "rating", "courseLength", "id"].includes(lessonField)) {
+      if (typeof value !== "number") {
+        return response.status(400).json({error: `Invalid value type for numeric field: ${lessonField}`});
+      }
+      const currentFieldValue = lesson[lessonField]; // Dynamically access the current field value.
+      // Handle numeric operations on Lesson attributes.
+      if (operation === "increment") {
+        updateQuery = { $inc: { [lessonField]: value } }; // Increment the field by 'value'.
+      } else if (operation === "decrement") {
+        if (currentFieldValue - value < 0) {
+          return response.status(400).json({ error: `${lessonField} cannot decrement below 0` });
+        }
+        updateQuery = { $inc: { [lessonField]: -value } }; // Decrement the field by 'value'.
+      } else if (operation === "set") {
+        updateQuery = { $set: { [lessonField]: value } }; // Set the field to the specified 'value'.
+      } else {
+        return response
+          .status(400)
+          .json({ error: "Invalid operation for a numeric field" });
+      }
+    } else if (
+      ["title", "subject", "location", "description", "image"].includes(
+        lessonField
+      )
+    ) {
+      // Handle string operations on Lesson attributes.
+      if (typeof value !== "string") {
+        return response.status(400).json({error: `Invalid value type for string field: ${lessonField}`});
+      }
+
+      if (operation === "set") {
+        updateQuery = { $set: { [lessonField]: value } }; // Set the field to the specified 'value'.
+      } else {
+        return response.status(400).json({error: `'set' is the only allowed operation for the string field: ${lessonField}`});
+      }
+    }
+
+    // Complete the update operation.
+    const result = await db.collection("lessons").updateOne(
+      { id: lessonId }, // Match the document by lesson ID.
+      updateQuery // Apply the dynamic update query.
+    );
+
+    response.json({ message: `Lesson ${lessonField} updated successfully`, result });
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 // Define the port for the server to listen on.
 const port = process.env.PORT || 3000;
