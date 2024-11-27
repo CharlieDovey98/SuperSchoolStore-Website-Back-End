@@ -7,9 +7,10 @@ const express = require("express");
 const path = require("path");
 //const http = require("http");
 const cors = require('cors');
+const fs = require("fs"); // Require the `fs` file system module for checking file existence when working with the websites images.
 const morgan = require("morgan");
-// Importing from mongoDB.js file.
-const { db, ObjectId } = require("./mongoDB"); 
+
+const { db } = require("./mongoDB"); // Importing from mongoDB.js file.
 
 // Call the express function to start a new Express application.
 const app = express();
@@ -22,7 +23,7 @@ app.use(express.json());
 
 // Allow CORS for GitHub Pages.
 const corsOptions = {
-  origin: ['https://charliedovey98.github.io'], // Allow frontend origin.
+  origin: ['https://charliedovey98.github.io'], // Allow frontend origins.
   methods: ['GET', 'POST', 'PUT', 'DELETE'],    // Allow HTTP methods.
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers.
 };
@@ -35,8 +36,13 @@ app.use((request, response, next) => {
   next();
 });
 
-// Serve static files (CSS, JS, Images) from the "BackEnd" folder.
-app.use('/static', express.static(path.join(__dirname, 'BackEnd')));
+// Middleware to serve static image files from the "images" folder.
+app.use('/images', express.static(path.join(__dirname, "images")));
+
+// Middleware for checking if an image exists in the backend images folder and, handling not finding the image requested.
+app.use('/images/:imageName', (request, response) => {
+  response.status(404).json({ error: "Image not found" });
+});
 
 // Error handling middleware.
 app.use((error, request, response, next) => {
