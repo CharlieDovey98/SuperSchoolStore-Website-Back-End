@@ -33,7 +33,7 @@ app.use(morgan('New Request :method :url Status(:status) Result: :res[content-le
 
 // Allow CORS for GitHub Pages.
 const corsOptions = {
-  origin: ['https://charliedovey98.github.io'], // Allow frontend origins.
+  origin: ['https://charliedovey98.github.io', 'http://127.0.0.1:3001'], // Allow frontend testing and production origins.
   methods: ['GET', 'POST', 'PUT', 'DELETE'],    // Allow HTTP methods.
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers.
 };

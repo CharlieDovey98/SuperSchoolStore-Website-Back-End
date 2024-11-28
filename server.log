@@ -8,3 +8,7 @@
 [ERROR] GET /images/educationnn.png at ::ffff:127.0.0.1 Message: Error encountered, Image educationnn.png not found.. dated: Thu Nov 28 2024 17:11:03 GMT+0000 (Greenwich Mean Time)
 [ERROR] GET /imageeees/education.png at ::ffff:127.0.0.1 Message: Error status 404 encountered, Route not found. dated: Thu Nov 28 2024 17:11:27 GMT+0000 (Greenwich Mean Time)
 [ERROR] GET /imaaaaageeees/education.png at ::ffff:127.0.0.1 Message: Error status 404 encountered, Route not found. dated: Thu Nov 28 2024 17:11:38 GMT+0000 (Greenwich Mean Time)
+[ERROR] GET /testError500 at ::1 Message: Test Error 500. dated: Thu Nov 28 2024 17:23:38 GMT+0000 (Greenwich Mean Time)
+[ERROR] GET /testError2000 at ::1 Message: Error status 404 encountered, Route not found. dated: Thu Nov 28 2024 17:23:42 GMT+0000 (Greenwich Mean Time)
+[ERROR] GET /Public/ at ::1 Message: Error status 404 encountered, Route not found. dated: Thu Nov 28 2024 17:49:59 GMT+0000 (Greenwich Mean Time)
+[ERROR] GET /images/ at ::1 Message: Error status 404 encountered, Route not found. dated: Thu Nov 28 2024 17:50:05 GMT+0000 (Greenwich Mean Time)
