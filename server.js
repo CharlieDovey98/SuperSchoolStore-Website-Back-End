@@ -9,17 +9,27 @@ const path = require("path");
 const cors = require('cors');
 const fs = require("fs"); // Require the `fs` file system module for checking file existence when working with the websites images.
 const morgan = require("morgan");
-
 const { db } = require("./mongoDB"); // Importing from mongoDB.js file.
 
 // Call the express function to start a new Express application.
 const app = express();
 
-// Middleware to log HTTP requests.
-app.use(morgan("dev"));
+// A writable stream for logging to a file, used in the middleware for indepth error logging.
+const logStream = fs.createWriteStream(path.join(__dirname, 'server.log'), { flags: 'a' });
+const logError = (error, request) => {
+  const errorMessage = `[ERROR] ${request.method} ${request.originalUrl} at ${request.ip} Message: ${error.message || "Unknown Error"} dated: ${new Date()}`;
+  console.error(errorMessage);
+  logStream.write(`${errorMessage}\n`);
+};
 
 // Middleware to parse JSON requests.
 app.use(express.json());
+
+// Middleware to serve static image files from the "images" folder.
+app.use('/images', express.static(path.join(__dirname, "images")));
+
+// Middleware to log HTTP requests.
+app.use(morgan('New Request :method :url Status(:status) Result: :res[content-length] bytes in: :response-time ms | IP: :remote-addr'));
 
 // Allow CORS for GitHub Pages.
 const corsOptions = {
@@ -29,26 +39,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Added to handle preflight requests.
-
-// Middleware to log additional request details.
-app.use((request, response, next) => {
-  console.log("Request coming in: " + request.method + " to " + request.url + "\nRequest IP: " + request.ip + "\nRequest date: " + new Date());
-  next();
-});
-
-// Middleware to serve static image files from the "images" folder.
-app.use('/images', express.static(path.join(__dirname, "images")));
-
-// Middleware for checking if an image exists in the backend images folder and, handling not finding the image requested.
-app.use('/images/:imageName', (request, response) => {
-  response.status(404).json({ error: "Image not found" });
-});
-
-// Error handling middleware.
-app.use((error, request, response, next) => {
-  console.error("Error encountered:", error);
-  response.status(500).json({ error: "An internal error occurred" });
-});
 
 // Route parameter to validate and preprocess the parameter element :collectionName.
 app.param("collectionName", (request, response, next, collectionName) => {
@@ -240,6 +230,30 @@ app.put("/collections/lessons/:lessonId/:lessonField/:operation", async (request
   }
 });
 
+// Get route for testing middleware error logging.
+app.get("/testError500", (request, response) => {
+  throw new Error("Test Error 500.");
+});
+
+// Middleware for checking if an image exists in the backend images folder and, handling not finding the image requested.
+app.use('/images/:imageName', (request, response) => {
+  const errorMessage = new Error(`Error encountered, Image ${request.params.imageName} not found..`);
+  logError(errorMessage, request);
+  return response.status(403).json({error: `Image ${request.params.imageName} not found, check server logs for more details.`,});
+});
+
+// Middleware for handling 500, route execution errors (test with get/ testError500).
+app.use((error, request, response, next) => {
+  logError(error, request);
+  response.status(500).json({ error: "An internal error occurred, check server logs for indepth error reporting." });
+});
+
+// Middleware for requests to incorrect routes, handling 404 errors.
+app.use((request, response) => {
+  const errorMessage = new Error("Error status 404 encountered, Route not found.");
+  logError(errorMessage, request);
+  response.status(404).json({ error: "Route not found, check server logs for indepth error reporting." });
+});
 
 // Define the port for the server to listen on.
 const port = process.env.PORT || 3000;
