@@ -31,14 +31,14 @@ app.use('/images', express.static(path.join(__dirname, "images")));
 // Middleware to log HTTP requests.
 app.use(morgan('New Request :method :url Status(:status) Result: :res[content-length] bytes in: :response-time ms | IP: :remote-addr'));
 
-// Allow CORS for GitHub Pages.
+// Set Cors options. 
 const corsOptions = {
   origin: ['https://charliedovey98.github.io', 'http://127.0.0.1:3001'], // Allow frontend testing and production origins.
   methods: ['GET', 'POST', 'PUT', 'DELETE'],    // Allow HTTP methods.
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers.
 };
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Added to handle preflight requests.
+app.options('*', cors(corsOptions)); // Added to handle preflight requests, e.g. PUT, DELETE.
 
 // Use the routes from the separate file
 app.use(Routes);
