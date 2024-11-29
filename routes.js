@@ -60,6 +60,44 @@ router.param("collectionName", (request, response, next, collectionName) => {
       }
     }
   );
+
+  // Route parameter to ensure the keyword search query is not empty, and and to preprocess it.
+  router.param("query", (request, response, next, query) => {
+    if (!query || query.trim() === "") {
+      const error = new Error("A Search query is required.");
+      error.status = 400; 
+      return next(error); // Pass the error to the error-handling middleware.
+    }
+    // Preprocessing the query, trimming and converting it to lowercase.
+    request.params.query = query.trim().toLowerCase();
+    next();
+  });
+
+  // Get route to search through the database to find a keyword search query.
+  router.get("/search/:query", async (request, response, next) => {
+    try {
+      const { query } = request.params; // Get the search query from the URL.
+  
+      const regex = new RegExp(query, "i"); // Define the case insensitive regex search pattern.
+  
+      // Search across all Lesson fields other than the unique ObjectId and id fields.
+      const results = await db.collection("lessons").find({
+        $or: [
+            { title: regex },
+            { subject: regex },
+            { location: regex },
+            { description: regex },
+            { courseLength: parseInt(query) || null }, // ParseInt to match exact number for fields.
+            { price: parseFloat(query) || null },
+            { spacesAvailable: parseInt(query) || null },
+            { rating: parseFloat(query) || null },
+        ],}).toArray();
+  
+      response.json(results); // Return the search results on the fields above.
+    } catch (error) {
+        next(error); // Pass the error to the middleware.
+    }
+  });
   
   // Route parameter to validate and preprocess the parameter element :lessonId.
   router.param("lessonId", (request, response, next, lessonId) => {
