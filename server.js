@@ -40,27 +40,35 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Added to handle preflight requests, e.g. PUT, DELETE.
 
-// Use the routes from the separate file
+// Use the routes from the separate file.
 app.use(Routes);
 
 // Middleware for checking if an image exists in the backend images folder and, handling not finding the image requested.
 app.use('/images/:imageName', (request, response) => {
-  const errorMessage = new Error(`Error encountered, Image ${request.params.imageName} not found..`);
+  const errorMessage = new Error(`Error encountered, Image ${request.params.imageName} not found.`);
   logError(errorMessage, request);
   return response.status(403).json({error: `Image ${request.params.imageName} not found, check server logs for more details.`,});
 });
 
-// Middleware for handling 500, route execution errors (test with get/ testError500).
+// Middleware for handling more generic errors.
 app.use((error, request, response, next) => {
-  logError(error, request);
-  response.status(500).json({ error: "An internal error occurred, check server logs for indepth error reporting." });
-});
+  // Check the error status and handle accordingly.
+  if (error.status === 400) {// Handle all status 400 Errors, Bad request Errors.
+    logError(error, request); 
+    return response.status(400).json({ error: error.message || "Bad Request" });
+  }
+  if (error.status === 404) { // Handle all status 404, incorrect Route Errors.
+    const errorMessage = new Error("Error status 404 encountered, Route not found.");
+    logError(errorMessage, request);
+    response.status(404).json({ error: "Route not found, check server logs for indepth error reporting." });
+  }
+  if (error.status === 500) { // Handle all status 500 Internal Server Errors. (test with get/ testError500).
+    logError(error, request);
+    return response.status(500).json({ error: "Route not found, check server logs for indepth error reporting." });
+  }
 
-// Middleware for requests to incorrect routes, handling 404 errors.
-app.use((request, response) => {
-  const errorMessage = new Error("Error status 404 encountered, Route not found.");
-  logError(errorMessage, request);
-  response.status(404).json({ error: "Route not found, check server logs for indepth error reporting." });
+  logError(error, request); // Catch and handle any other errors.
+  response.status(error.status || 500).json({ error: "An internal error occurred, check server logs for indepth error reporting." });
 });
 
 // Define the port for the server to listen on.
