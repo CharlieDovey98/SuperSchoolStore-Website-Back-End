@@ -28,4 +28,4 @@ client.connect((error) => {
   }
 });
 
-module.exports = { db }; // Export the db instance for use in server.js
+module.exports = { db, ObjectId }; // Export the db instance for use in server.js
