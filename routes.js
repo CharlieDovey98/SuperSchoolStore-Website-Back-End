@@ -1,4 +1,4 @@
-// User Routes for SuperSchoolStore S3 containing GET POST etc.
+// User Routes for SuperSchoolStore S3 website, containing parameters and methods for routes: GET POST etc.
 
 // Import the neccessary modules.
 const express = require("express");
@@ -11,7 +11,9 @@ router.param("collectionName", (request, response, next, collectionName) => {
   const validCollectionName = ["lessons", "purchases"];
   if (!validCollectionName.includes(collectionName)) {
     // If invalid input, return an error.
-    return response.status(400).json({ error: `Invalid collection name: ${collectionName}` });
+    const error = new Error(`Invalid collection name: ${collectionName}`);
+    error.status = 400;
+    return next(error);
   }
   request.collection = db.collection(collectionName);
   return next();
@@ -28,7 +30,9 @@ router.param("selectedSortAspect",(request, response, next, selectedSortAspect) 
       "spacesAvailable",
     ];
     if (!validSortAspects.includes(selectedSortAspect)) {
-        return response.status(400).json({ error: `Invalid sort aspect: ${selectedSortAspect}` });
+        const error = new Error(`Invalid sort aspect: ${selectedSortAspect}`);
+        error.status = 400;
+        return next(error);
     }
     request.sortAspect = selectedSortAspect; // Store the validated value in the request object.
     next();
@@ -39,7 +43,9 @@ router.param("selectedSortAspect",(request, response, next, selectedSortAspect) 
 router.param("sortAscendingDescending",(request, response, next, sortAscendingDescending) => {
     // Guard statement to validate the input. Only ascending and descending are valid inputs.
     if (!["ascending", "descending"].includes(sortAscendingDescending)) {
-      return response.status(400).json({ error: `Invalid sort direction: ${sortAscendingDescending}` });
+      const error = new Error(`Invalid sort direction: ${sortAscendingDescending}`);
+      error.status = 400;
+      return next(error);
     }
     // The ternary operator assigns a sorting direction integer to the request element, based on the sortAscendingDescending value. If descending -1, or 1 for ascending.
     request.sortDirection = sortAscendingDescending === "descending" ? -1 : 1;
@@ -114,13 +120,17 @@ router.param("lessonId", (request, response, next, lessonId) => {(async () => {
       const numericId = parseInt(lessonId, 10); // Parse the lessonId as a base-10 number.
       if (isNaN(numericId)) {
         // Check if the numericId is Not-A-Number.
-        return response.status(400).json({ error: "Invalid lesson ID" });
+        const error = new Error("Invalid lesson ID" );
+        error.status = 400;
+        return next(error);
       }
 
       // Check if the ID exists in the database.
       const exists = await db.collection("lessons").findOne({ id: numericId });
       if (!exists) {
-        return response.status(404).json({ error: "Lesson ID not found in database" });
+        const error = new Error("Lesson ID not found in database");
+        error.status = 404;
+        return next(error);
       }
 
       request.lessonId = numericId; // Store the validated ID in request object.
@@ -146,8 +156,22 @@ router.get("/collections/:collectionName/:lessonId",async (request, response, ne
 router.post("/collections/purchases", async (request, response, next) => {
   try {
     const purchase = request.body; // Get purchase details from the request body.
-    if (!purchase) {
-      return response.status(400).json({ error: "Purchase data is missing" });
+
+    // Guard statement to validate the input. Required fields to make a purchase are below.
+    const requiredFields = ["forename", "surname", "phoneNumber", "lessons"];
+    const missingFields = []; // Array to store missing fields within the fetch.
+    // For loop to check if all required fields are present.
+    for (const field of requiredFields) {
+      if (!purchase[field]) {
+        missingFields.push(field); // Add missing field to the array.
+      }
+    }
+
+    // If there are missing fields, return an error.
+    if (missingFields.length > 0) {
+      const error = new Error(`The following fields are required: ${missingFields.join(", ")}`);
+      error.status = 400;
+      return next(error);
     }
     // Insert the purchase into the purchases collection.
     const result = await db.collection("purchases").insertOne(purchase);
@@ -173,7 +197,9 @@ router.param("lessonField", (request, response, next, lessonField) => {
   ];
   // Guard statement to validate the input. Only the above strings are valid inputs.
   if (!validFields.includes(lessonField)) {
-    return response.status(400).json({ error: `Invalid lesson field entered: ${lessonField}` });
+    const error = new Error(`Invalid lesson field entered: ${lessonField}`);
+    error.status = 400;
+    return next(error);
   }
   request.lessonField = lessonField; // Store the validated lessonField in request object.
   next();
@@ -185,7 +211,9 @@ router.param("operation", (request, response, next, operation) => {
 
   // Guard statement to validate the input.
   if (!validOperations.includes(operation)) {
-    return response.status(400).json({ error: `Invalid operation entered: ${operation}` });
+    const error = new Error(`Invalid operation entered: ${operation}` );
+    error.status = 400;
+    return next(error);
   }
 
   request.operation = operation; // Store the validated operation in the request object.
@@ -204,7 +232,9 @@ router.put("/collections/lessons/:lessonId/:lessonField/:operation",async (reque
       // Validate value based on numerical field types.
       if (["spacesAvailable", "price", "rating", "courseLength", "id"].includes(lessonField)) {
         if (typeof value !== "number") {
-          return response.status(400).json({error: `Invalid value type for numeric field: ${lessonField}`,});
+          const error = new Error(`Invalid value type for numeric field: ${lessonField}`);
+          error.status = 400;
+          return next(error);
         }
         const currentFieldValue = lesson[lessonField]; // Dynamically access the current field value.
         // Handle numeric operations on Lesson attributes.
@@ -212,24 +242,32 @@ router.put("/collections/lessons/:lessonId/:lessonField/:operation",async (reque
           updateQuery = { $inc: { [lessonField]: value } }; // Increment the field by 'value'.
         } else if (operation === "decrement") {
           if (currentFieldValue - value < 0) {
-            return response.status(400).json({ error: `${lessonField} cannot decrement below 0` });
+            const error = new Error(`${lessonField} cannot decrement below 0`);
+            error.status = 400;
+            return next(error);
           }
           updateQuery = { $inc: { [lessonField]: -value } }; // Decrement the field by 'value'.
         } else if (operation === "set") {
           updateQuery = { $set: { [lessonField]: value } }; // Set the field to the specified 'value'.
         } else {
-          return response.status(400).json({ error: "Invalid operation for a numeric field" });
+          const error = new Error("Invalid operation for a numeric field" );
+          error.status = 400;
+          return next(error);
         }
       } else if (["title", "subject", "location", "description", "image"].includes(lessonField)) {
         // Handle string operations on Lesson attributes.
         if (typeof value !== "string") {
-          return response.status(400).json({error: `Invalid value type for string field: ${lessonField}`,});
+          const error = new Error(`Invalid value type for string field: ${lessonField}`);
+          error.status = 400;
+          return next(error);
         }
 
         if (operation === "set") {
           updateQuery = { $set: { [lessonField]: value } }; // Set the field to the specified 'value'.
         } else {
-          return response.status(400).json({error: `'set' is the only allowed operation for the string field: ${lessonField}`,});
+          const error = new Error(`'set' is the only allowed operation for the string field: ${lessonField}`);
+          error.status = 400;
+          return next(error);
         }
       }
 
@@ -306,8 +344,10 @@ router.post('/collections/lessons/newPost', async (request, response, next) => {
 });
 
 // Get route for testing middleware error logging.
-router.get("/testError500", (request, response) => {
-  throw new Error("Test Error 500.");
+router.get("/testError500", (request, response, next) => {
+  const error = new Error("Internal server Error test, Error status 500.");
+  error.status = 500;
+  next(error);
 });
 
 module.exports = router;
