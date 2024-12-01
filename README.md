@@ -16,7 +16,8 @@
 *Ensure security check is accepted to enable the page will work, via visiting*:  
 ![SuperSchoolStore-Navigation-Connection-Procedure](projectImages-backEnd/Navigation-Connection-Procedure.png)  
 
-*Get request example, GET all lessons in the database*: https://superschoolstore.eu-west-2.elasticbeanstalk.com/collections/lessons  
+*Get request example, GET all lessons in the database*:  
+https://superschoolstore.eu-west-2.elasticbeanstalk.com/collections/lessons  
 ![SuperSchoolStore-AWS-Route-Example](projectImages-backEnd/AWS-Route-Example.png)  
 
 *HTTPS SSL/TSL Certificates located in: /certificates created, self-signed and uplaoded to AWS Certificate Manager for use in this project.*  
