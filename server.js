@@ -80,6 +80,6 @@ app.use((error, request, response, next) => {
 
 // Define the port for the server to listen on.
 const port = process.env.PORT || 3000;
-app.listen(port, function() {
-  console.log(`App started on port: ${port}`);
+app.listen(port, function () {
+  console.log(`App started on port: ${port}\nUse: http://127.0.0.1:3001/ for localised testing purposes, in conjunction with Live Preview services via the index.html.\nUse: https://charliedovey98.github.io/SuperSchoolStore-Website-Front-End/ for production use.`);
 });

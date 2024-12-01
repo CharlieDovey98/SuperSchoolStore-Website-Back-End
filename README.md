@@ -5,6 +5,16 @@
 
 ## Project Links/ Information  
 
+*Terminal commands*
+
+- As node_mudules has not been pushed, please use the command: npm install in a back end terminal to attain the necessary packages.  
+- Use npm start to initialise the server in a testing environment.  
+- Please switch over the backendUrl variable within the front end, vue.js file for fetch requests to work.  
+- ctrl + c to halt the server. y to confirm.  
+- Use: http://127.0.0.1:3001/ for localised testing purposes, in conjunction with Live Preview services via the index.html.
+
+*Use server.log for detailed error logging information*  
+
 *Github Back-End Repository Link*: https://github.com/CharlieDovey98/SuperSchoolStore-Website-Back-End  
 *Github Front-End Repository Link*: https://github.com/CharlieDovey98/SuperSchoolStore-Website-Front-End  
 ![SuperSchoolStore-Repositories](projectImages-backEnd/Github-Project-Repositories.png)  
